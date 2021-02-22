@@ -1,0 +1,14 @@
+plugins {
+    id 'java'
+}
+
+group 'net.servzero'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'io.netty', name: 'netty-all', version: '4.1.59.Final'
+}
