@@ -1,7 +1,11 @@
 package net.servzero;
 
+import net.servzero.server.Server;
+
 public class Main {
     public static void main(String[] args) {
-        //TODO: Start an server instance
+        Server server = new Server();
+
+        server.mainThread.start();
     }
 }
