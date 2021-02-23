@@ -11,6 +11,7 @@ import net.servzero.network.protocol.EnumProtocol;
 import net.servzero.network.protocol.EnumProtocolDirection;
 import net.servzero.server.Server;
 import net.servzero.server.player.Player;
+import net.servzero.server.player.PlayerLogoutManager;
 
 import java.net.SocketAddress;
 
@@ -58,6 +59,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<PacketHan
         if (this.owner != null) {
             //TODO: Add leave
             Server.getInstance().unregisterPlayer(owner);
+            PlayerLogoutManager.handleLogout(owner);
         }
     }
 
