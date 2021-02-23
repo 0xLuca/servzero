@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class InPacketLoginHandler extends AbstractInPacketLoginHandler {
+publhttps://discord.com/channels/631154868329119765/674924096177307648/813839253632581632ic class InPacketLoginHandler extends AbstractInPacketLoginHandler {
     public InPacketLoginHandler(NetworkManager networkManager) {
         super(networkManager);
     }
