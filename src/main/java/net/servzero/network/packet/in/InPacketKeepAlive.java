@@ -1,12 +1,12 @@
 package net.servzero.network.packet.in;
 
 import net.servzero.network.packet.Packet;
-import net.servzero.network.packet.handler.AbstractInPacketHandler;
+import net.servzero.network.packet.handler.AbstractInPacketPlayHandler;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
 
 import java.io.IOException;
 
-public class InPacketKeepAlive implements Packet<AbstractInPacketHandler> {
+public class InPacketKeepAlive implements Packet<AbstractInPacketPlayHandler> {
     private long id;
 
     @Override
@@ -20,7 +20,7 @@ public class InPacketKeepAlive implements Packet<AbstractInPacketHandler> {
     }
 
     @Override
-    public void handle(AbstractInPacketHandler handler) {
+    public void handle(AbstractInPacketPlayHandler handler) {
         handler.handleKeepAlive(this);
     }
 }

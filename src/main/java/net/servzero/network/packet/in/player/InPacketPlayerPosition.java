@@ -1,6 +1,6 @@
 package net.servzero.network.packet.in.player;
 
-import net.servzero.network.packet.handler.AbstractInPacketHandler;
+import net.servzero.network.packet.handler.AbstractInPacketPlayHandler;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
 
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class InPacketPlayerPosition extends InPacketPlayer {
     }
 
     @Override
-    public void handle(AbstractInPacketHandler handler) {
+    public void handle(AbstractInPacketPlayHandler handler) {
         handler.handlePlayerPosition(this);
     }
 

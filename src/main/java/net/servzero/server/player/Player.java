@@ -3,6 +3,8 @@ package net.servzero.server.player;
 import net.servzero.network.NetworkManager;
 import net.servzero.server.entity.Entity;
 
+import java.util.UUID;
+
 public class Player extends Entity {
     private final GameProfile profile;
     private ClientSettings settings = new ClientSettings();
@@ -23,5 +25,13 @@ public class Player extends Entity {
 
     public void setSettings(ClientSettings settings) {
         this.settings = settings;
+    }
+
+    public String getName() {
+        return this.profile.getName();
+    }
+
+    public UUID getUniqueId() {
+        return this.profile.getUuid();
     }
 }

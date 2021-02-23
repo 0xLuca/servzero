@@ -7,8 +7,8 @@ import net.servzero.network.packet.in.player.InPacketPlayer;
 import net.servzero.network.packet.in.player.InPacketPlayerPosition;
 import net.servzero.network.packet.in.player.InPacketPlayerPositionLook;
 
-public abstract class AbstractInPacketHandler extends PacketHandler {
-    public AbstractInPacketHandler(NetworkManager networkManager) {
+public abstract class AbstractInPacketPlayHandler extends PacketHandler {
+    public AbstractInPacketPlayHandler(NetworkManager networkManager) {
         super(networkManager);
     }
 
@@ -24,4 +24,5 @@ public abstract class AbstractInPacketHandler extends PacketHandler {
     public abstract void handleHeldItemChange(InPacketHeldItemChange packet);
     public abstract void handleAnimation(InPacketAnimation inPacketAnimation);
     public abstract void handleKeepAlive(InPacketKeepAlive inPacketKeepAlive);
+    public abstract void handleChatMessage(InPacketChatMessage packet);
 }

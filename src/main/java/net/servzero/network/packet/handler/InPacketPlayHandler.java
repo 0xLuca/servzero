@@ -8,7 +8,7 @@ import net.servzero.network.packet.in.player.InPacketPlayerPosition;
 import net.servzero.network.packet.in.player.InPacketPlayerPositionLook;
 import net.servzero.server.player.Player;
 
-public class InPacketPlayHandler extends AbstractInPacketHandler {
+public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
     private final Player player;
 
     public InPacketPlayHandler(Player player) {
@@ -69,5 +69,10 @@ public class InPacketPlayHandler extends AbstractInPacketHandler {
     @Override
     public void handleKeepAlive(InPacketKeepAlive inPacketKeepAlive) {
 
+    }
+
+    @Override
+    public void handleChatMessage(InPacketChatMessage packet) {
+        Logger.info("[Chat] " + this.player.getName()  + ": " + packet.getMessage());
     }
 }

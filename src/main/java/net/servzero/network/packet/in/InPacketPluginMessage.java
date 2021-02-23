@@ -1,12 +1,12 @@
 package net.servzero.network.packet.in;
 
 import net.servzero.network.packet.Packet;
-import net.servzero.network.packet.handler.AbstractInPacketHandler;
+import net.servzero.network.packet.handler.AbstractInPacketPlayHandler;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
 
 import java.io.IOException;
 
-public class InPacketPluginMessage implements Packet<AbstractInPacketHandler> {
+public class InPacketPluginMessage implements Packet<AbstractInPacketPlayHandler> {
     private String channel;
     private PacketDataSerializer data;
 
@@ -27,7 +27,7 @@ public class InPacketPluginMessage implements Packet<AbstractInPacketHandler> {
     }
 
     @Override
-    public void handle(AbstractInPacketHandler handler) {
+    public void handle(AbstractInPacketPlayHandler handler) {
         handler.handlePluginMessage(this);
     }
 

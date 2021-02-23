@@ -22,6 +22,7 @@ public enum EnumProtocol {
     }},
     PLAY(0) {{
         this.addPacket(0x00, EnumProtocolDirection.TO_SERVER, InPacketTeleportConfirm.class);
+        this.addPacket(0x02, EnumProtocolDirection.TO_SERVER, InPacketChatMessage.class);
         this.addPacket(0x04, EnumProtocolDirection.TO_SERVER, InPacketClientSettings.class);
         this.addPacket(0x08, EnumProtocolDirection.TO_SERVER, InPacketCloseWindow.class);
         this.addPacket(0x09, EnumProtocolDirection.TO_SERVER, InPacketPluginMessage.class);
@@ -32,6 +33,7 @@ public enum EnumProtocol {
         this.addPacket(0x1A, EnumProtocolDirection.TO_SERVER, InPacketHeldItemChange.class);
         this.addPacket(0x1D, EnumProtocolDirection.TO_SERVER, InPacketAnimation.class);
         this.addPacket(0x0D, EnumProtocolDirection.TO_CLIENT, OutPacketDifficulty.class);
+        this.addPacket(0x0F, EnumProtocolDirection.TO_CLIENT, OutPacketChatMessage.class);
         this.addPacket(0x1A, EnumProtocolDirection.TO_CLIENT, OutPacketDisconnect.class);
         this.addPacket(0x1B, EnumProtocolDirection.TO_CLIENT, OutPacketEntityStatus.class);
         this.addPacket(0x1F, EnumProtocolDirection.TO_CLIENT, OutPacketKeepAlive.class);

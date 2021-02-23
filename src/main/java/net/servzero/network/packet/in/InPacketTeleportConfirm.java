@@ -1,10 +1,10 @@
 package net.servzero.network.packet.in;
 
 import net.servzero.network.packet.Packet;
-import net.servzero.network.packet.handler.AbstractInPacketHandler;
+import net.servzero.network.packet.handler.AbstractInPacketPlayHandler;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
 
-public class InPacketTeleportConfirm implements Packet<AbstractInPacketHandler> {
+public class InPacketTeleportConfirm implements Packet<AbstractInPacketPlayHandler> {
     private int teleportId;
 
     @Override
@@ -18,7 +18,7 @@ public class InPacketTeleportConfirm implements Packet<AbstractInPacketHandler> 
     }
 
     @Override
-    public void handle(AbstractInPacketHandler handler) {
+    public void handle(AbstractInPacketPlayHandler handler) {
         handler.handleTeleportConfirm(this);
     }
 

@@ -1,12 +1,12 @@
 package net.servzero.network.packet.in.player;
 
 import net.servzero.network.packet.Packet;
-import net.servzero.network.packet.handler.AbstractInPacketHandler;
+import net.servzero.network.packet.handler.AbstractInPacketPlayHandler;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
 
 import java.io.IOException;
 
-public class InPacketPlayer implements Packet<AbstractInPacketHandler> {
+public class InPacketPlayer implements Packet<AbstractInPacketPlayHandler> {
     protected boolean onGround;
 
     @Override
@@ -20,7 +20,7 @@ public class InPacketPlayer implements Packet<AbstractInPacketHandler> {
     }
 
     @Override
-    public void handle(AbstractInPacketHandler handler) {
+    public void handle(AbstractInPacketPlayHandler handler) {
         handler.handlePlayer(this);
     }
 

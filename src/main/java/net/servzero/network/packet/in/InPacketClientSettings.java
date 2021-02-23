@@ -1,8 +1,7 @@
 package net.servzero.network.packet.in;
 
 import net.servzero.network.packet.Packet;
-import net.servzero.network.packet.PacketHandler;
-import net.servzero.network.packet.handler.AbstractInPacketHandler;
+import net.servzero.network.packet.handler.AbstractInPacketPlayHandler;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
 import net.servzero.server.game.EnumChatMode;
 import net.servzero.server.game.EnumHand;
@@ -10,7 +9,7 @@ import net.servzero.server.player.ClientSettings;
 
 import java.util.Locale;
 
-public class InPacketClientSettings implements Packet<AbstractInPacketHandler> {
+public class InPacketClientSettings implements Packet<AbstractInPacketPlayHandler> {
     private Locale locale;
     private byte viewDistance;
     private EnumChatMode chatMode;
@@ -34,7 +33,7 @@ public class InPacketClientSettings implements Packet<AbstractInPacketHandler> {
     }
 
     @Override
-    public void handle(AbstractInPacketHandler handler) {
+    public void handle(AbstractInPacketPlayHandler handler) {
         handler.handleClientSettings(this);
     }
 

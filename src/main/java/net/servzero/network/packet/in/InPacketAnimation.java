@@ -1,13 +1,13 @@
 package net.servzero.network.packet.in;
 
 import net.servzero.network.packet.Packet;
-import net.servzero.network.packet.handler.AbstractInPacketHandler;
+import net.servzero.network.packet.handler.AbstractInPacketPlayHandler;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
 import net.servzero.server.game.EnumHand;
 
 import java.io.IOException;
 
-public class InPacketAnimation implements Packet<AbstractInPacketHandler> {
+public class InPacketAnimation implements Packet<AbstractInPacketPlayHandler> {
     private EnumHand hand;
 
     @Override
@@ -21,7 +21,7 @@ public class InPacketAnimation implements Packet<AbstractInPacketHandler> {
     }
 
     @Override
-    public void handle(AbstractInPacketHandler handler) {
+    public void handle(AbstractInPacketPlayHandler handler) {
         handler.handleAnimation(this);
     }
 

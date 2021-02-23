@@ -6,12 +6,12 @@ import net.servzero.network.packet.serialization.PacketDataSerializer;
 
 import java.io.IOException;
 
-public class InPacketCloseWindow implements Packet<AbstractInPacketPlayHandler> {
-    private short windowId;
+public class InPacketChatMessage implements Packet<AbstractInPacketPlayHandler> {
+    private String message;
 
     @Override
     public void read(PacketDataSerializer serializer) throws IOException {
-        this.windowId = serializer.readUnsignedByte();
+        this.message = serializer.readString(256);
     }
 
     @Override
@@ -21,10 +21,10 @@ public class InPacketCloseWindow implements Packet<AbstractInPacketPlayHandler> 
 
     @Override
     public void handle(AbstractInPacketPlayHandler handler) {
-        handler.handleCloseWindow(this);
+        handler.handleChatMessage(this);
     }
 
-    public short getWindowId() {
-        return windowId;
+    public String getMessage() {
+        return message;
     }
 }
