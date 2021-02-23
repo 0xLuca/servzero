@@ -6,6 +6,8 @@ import net.servzero.server.game.EnumGameMode;
 import net.servzero.server.game.EnumPlayerListAction;
 import net.servzero.server.player.Player;
 import net.servzero.server.ticker.KeepAliveTicker;
+import net.servzero.server.world.World;
+import net.servzero.server.world.block.Coordinate;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -23,12 +25,13 @@ public class Server implements Runnable {
     public final Thread mainThread;
     public Thread keepAliveThread;
     private Connector connector;
+    private World world;
     private boolean running;
     private List<Player> playerList = new ArrayList<>();
 
     private Server() {
         this.connector = new Connector();
-
+        this.world = new World();
         this.mainThread = new Thread(this, "Server thread");
         registerWorkers();
     }
@@ -44,6 +47,7 @@ public class Server implements Runnable {
 
     public boolean start() {
         Logger.info("Starting Server...");
+        world.generate(new Coordinate(0, 0));
 
         try {
             connector.initialize(null, 25565);

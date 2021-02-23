@@ -11,4 +11,20 @@ public class ChunkSection {
     private short blockCount;
     private short bitsPerBlock;
     private Map<Coordinate, Block> blockMap = new HashMap<>();
+
+    public ChunkSection() {
+    }
+
+    public int addBlock(Coordinate coord, Block block) {
+        blockMap.put(coord, block);
+        return 0;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
 }
