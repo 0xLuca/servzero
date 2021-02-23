@@ -9,10 +9,14 @@ import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.PacketHandler;
 import net.servzero.network.protocol.EnumProtocol;
 import net.servzero.network.protocol.EnumProtocolDirection;
+import net.servzero.server.Server;
+import net.servzero.server.player.Player;
 
 import java.net.SocketAddress;
 
 public class NetworkManager extends SimpleChannelInboundHandler<Packet<PacketHandler>> {
+    private Player owner = null;
+
     private Channel channel;
     private SocketAddress address;
     private PacketHandler packetHandler;
@@ -24,13 +28,16 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<PacketHan
         this.protocolDirection = protocolDirection;
     }
 
+    public void setOwner(Player player) {
+        this.owner = player;
+    }
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
         this.channel = ctx.channel();
         this.address = this.channel.remoteAddress();
         setProtocol(EnumProtocol.HANDSHAKING);
-        Logger.info("New connection: " + this.channel.remoteAddress());
     }
 
     @Override
@@ -42,6 +49,15 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<PacketHan
             } else {
                 Logger.error("Could not handle packet: No packet handler found");
             }
+        }
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
+        if (this.owner != null) {
+            //TODO: Add leave
+            Server.getInstance().unregisterPlayer(owner);
         }
     }
 

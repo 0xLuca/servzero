@@ -75,5 +75,12 @@ public class Server implements Runnable {
 
     public void registerPlayer(Player player) {
         this.playerList.add(player);
+        player.networkManager.setOwner(player);
+        Logger.info("Player " + player.getName() + " joined.");
+    }
+
+    public void unregisterPlayer(Player player) {
+        this.playerList.remove(player);
+        Logger.info("Player " + player.getName() + " left.");
     }
 }

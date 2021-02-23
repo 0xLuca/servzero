@@ -51,7 +51,7 @@ public class InPacketLoginHandler extends AbstractInPacketLoginHandler{
                     ));
                 }}
         ));
-        this.networkManager.sendPacket(new OutPacketPlayerAbilities(true, true, true, true, 1.0F, 0.0F));
+        this.networkManager.sendPacket(new OutPacketPlayerAbilities(true, false, false, true, 1.0F, 0.0F));
     }
 
     @Override
