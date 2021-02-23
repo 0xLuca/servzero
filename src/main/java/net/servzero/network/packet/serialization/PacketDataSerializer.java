@@ -105,7 +105,7 @@ public class PacketDataSerializer extends ByteBuf {
 
         return this;
     }
-    public <T extends Enum<T>> T a(Class<T> oclass) {
+    public <T extends Enum<T>> T readEnum(Class<T> oclass) {
         return ((T[]) oclass.getEnumConstants())[this.readVarInt()]; // CraftBukkit - fix decompile error
     }
 

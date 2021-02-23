@@ -1,5 +1,6 @@
 package net.servzero.network.packet.handler;
 
+import net.servzero.logger.Logger;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.in.*;
 import net.servzero.network.packet.in.player.InPacketPlayer;
@@ -63,5 +64,10 @@ public class InPacketPlayHandler extends AbstractInPacketHandler {
     @Override
     public void handleAnimation(InPacketAnimation inPacketAnimation) {
 
+    }
+
+    @Override
+    public void handleKeepAlive(InPacketKeepAlive inPacketKeepAlive) {
+        Logger.info("KEEPALIVE");
     }
 }

@@ -4,6 +4,7 @@ import net.servzero.network.NetworkManager;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.in.InPacketLoginStart;
 import net.servzero.network.packet.out.*;
+import net.servzero.server.Server;
 import net.servzero.server.game.EnumDifficulty;
 import net.servzero.server.game.EnumDimension;
 import net.servzero.server.game.EnumGameMode;
@@ -23,6 +24,8 @@ public class InPacketLoginHandler extends AbstractInPacketLoginHandler{
         GameProfile profile = new GameProfile(UUID.randomUUID(), packet.getUsername());
         Player player = new Player(profile, this.networkManager);
 
+        Server.getInstance().registerPlayer(player);
+
         this.networkManager.sendPacket(new OutPacketLoginSuccess(profile.getUuid(), profile.getName()));
         this.networkManager.setPacketHandler(new InPacketPlayHandler(player));
         this.networkManager.sendPacket(new OutPacketJoinGame(
@@ -36,7 +39,7 @@ public class InPacketLoginHandler extends AbstractInPacketLoginHandler{
         ));
         this.networkManager.sendPacket(new OutPacketHeldItemChange(1));
         this.networkManager.sendPacket(new OutPacketDifficulty(EnumDifficulty.PEACEFUL));
-        this.networkManager.sendPacket(new OutPacketPositionLook(0, 0, 0, 0, 0, (byte) 0, 0));
+        this.networkManager.sendPacket(new OutPacketPositionLook(0, 10, 0, 0, 0, (byte) 0, 0));
     }
 
     @Override

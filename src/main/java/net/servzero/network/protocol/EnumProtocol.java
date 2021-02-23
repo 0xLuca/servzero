@@ -25,6 +25,7 @@ public enum EnumProtocol {
         this.addPacket(0x04, EnumProtocolDirection.TO_SERVER, InPacketClientSettings.class);
         this.addPacket(0x08, EnumProtocolDirection.TO_SERVER, InPacketCloseWindow.class);
         this.addPacket(0x09, EnumProtocolDirection.TO_SERVER, InPacketPluginMessage.class);
+        this.addPacket(0x0B, EnumProtocolDirection.TO_SERVER, InPacketKeepAlive.class);
         this.addPacket(0x0C, EnumProtocolDirection.TO_SERVER, InPacketPlayer.class);
         this.addPacket(0x0D, EnumProtocolDirection.TO_SERVER, InPacketPlayerPosition.class);
         this.addPacket(0x0E, EnumProtocolDirection.TO_SERVER, InPacketPlayerPositionLook.class);
@@ -33,7 +34,9 @@ public enum EnumProtocol {
         this.addPacket(0x0D, EnumProtocolDirection.TO_CLIENT, OutPacketDifficulty.class);
         this.addPacket(0x1A, EnumProtocolDirection.TO_CLIENT, OutPacketDisconnect.class);
         this.addPacket(0x1B, EnumProtocolDirection.TO_CLIENT, OutPacketEntityStatus.class);
+        this.addPacket(0x1F, EnumProtocolDirection.TO_CLIENT, OutPacketKeepAlive.class);
         this.addPacket(0x23, EnumProtocolDirection.TO_CLIENT, OutPacketJoinGame.class);
+        this.addPacket(0x2E, EnumProtocolDirection.TO_CLIENT, OutPacketPlayerListItem.class);
         this.addPacket(0x2F, EnumProtocolDirection.TO_CLIENT, OutPacketPositionLook.class);
         this.addPacket(0x3A, EnumProtocolDirection.TO_CLIENT, OutPacketHeldItemChange.class);
     }},

@@ -23,4 +23,5 @@ public abstract class AbstractInPacketHandler extends PacketHandler {
 
     public abstract void handleHeldItemChange(InPacketHeldItemChange packet);
     public abstract void handleAnimation(InPacketAnimation inPacketAnimation);
+    public abstract void handleKeepAlive(InPacketKeepAlive inPacketKeepAlive);
 }

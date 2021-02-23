@@ -1,6 +1,8 @@
 package net.servzero.server;
 
 import net.servzero.logger.Logger;
+import net.servzero.server.player.Player;
+import net.servzero.server.ticker.KeepAliveTicker;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -8,18 +10,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Server implements Runnable {
+    private static Server INSTANCE = null;
+
     public static final List<Integer> IGNORED_PACKETS = new ArrayList<>() {{
         add(0x4D); // Advancements
     }};
 
     public final Thread mainThread;
+    public Thread keepAliveThread;
     private Connector connector;
     private boolean running;
+    private List<Player> playerList = new ArrayList<>();
 
-    public Server() {
+    private Server() {
         this.connector = new Connector();
 
         this.mainThread = new Thread(this, "Server thread");
+        registerWorkers();
+    }
+
+    private void registerWorkers() {
+        this.keepAliveThread = new Thread(new KeepAliveTicker(this), "KeepAlive thread");
+        this.keepAliveThread.start();
+    }
+
+    public static Server getInstance() {
+        return INSTANCE == null ? (INSTANCE = new Server()) : INSTANCE;
     }
 
     public boolean start() {
@@ -50,5 +66,13 @@ public class Server implements Runnable {
                 }
             }
         }
+    }
+
+    public List<Player> getPlayerList() {
+        return playerList;
+    }
+
+    public void registerPlayer(Player player) {
+        this.playerList.add(player);
     }
 }

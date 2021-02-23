@@ -1,11 +1,11 @@
 package net.servzero.server.game;
 
 public enum EnumGameMode {
-    NOT_SET(-1),
     SURVIVAL(0),
     CREATIVE(1),
     ADVENTURE(2),
-    SPECTATOR(3)
+    SPECTATOR(3),
+    NOT_SET(-1)
     ;
 
     private final byte id;
