@@ -28,7 +28,7 @@ public class InPacketPluginMessage implements Packet<AbstractInPacketHandler> {
 
     @Override
     public void handle(AbstractInPacketHandler handler) {
-
+        handler.handlePluginMessage(this);
     }
 
     public String getChannel() {

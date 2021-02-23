@@ -18,6 +18,5 @@
 .idea/**/dictionaries
 .idea/**/shelf
 build/
-out/
 !gradle-wrapper.jar
 *~

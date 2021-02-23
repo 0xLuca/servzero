@@ -4,8 +4,14 @@ import net.servzero.logger.Logger;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Server implements Runnable {
+    public static final List<Integer> IGNORED_PACKETS = new ArrayList<>() {{
+        add(0x4D); // Advancements
+    }};
+
     public final Thread mainThread;
     private Connector connector;
     private boolean running;
