@@ -25,6 +25,9 @@ public class InPacketLoginHandler extends AbstractInPacketLoginHandler {
 
         Server.getInstance().registerPlayer(player);
 
+        //TODO: Write own class & method for this process
+        //TODO: Send real information
+
         this.networkManager.sendPacket(new OutPacketLoginSuccess(profile.getUuid(), profile.getName()));
         this.networkManager.setPacketHandler(new InPacketPlayHandler(player));
         this.networkManager.sendPacket(new OutPacketJoinGame(
