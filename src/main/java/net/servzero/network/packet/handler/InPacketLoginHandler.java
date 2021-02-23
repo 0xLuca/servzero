@@ -5,13 +5,11 @@ import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.in.InPacketLoginStart;
 import net.servzero.network.packet.out.*;
 import net.servzero.server.Server;
-import net.servzero.server.game.EnumDifficulty;
-import net.servzero.server.game.EnumDimension;
-import net.servzero.server.game.EnumGameMode;
-import net.servzero.server.game.EnumLevelType;
+import net.servzero.server.game.*;
 import net.servzero.server.player.GameProfile;
 import net.servzero.server.player.Player;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class InPacketLoginHandler extends AbstractInPacketLoginHandler{
@@ -40,6 +38,19 @@ public class InPacketLoginHandler extends AbstractInPacketLoginHandler{
         this.networkManager.sendPacket(new OutPacketHeldItemChange(1));
         this.networkManager.sendPacket(new OutPacketDifficulty(EnumDifficulty.PEACEFUL));
         this.networkManager.sendPacket(new OutPacketPositionLook(0, 10, 0, 0, 0, (byte) 0, 0));
+        this.networkManager.sendPacket(new OutPacketPlayerListItem(
+                EnumPlayerListAction.ADD_PLAYER,
+                1,
+                new ArrayList<>() {{
+                    add(new OutPacketPlayerListItem.PlayerListItem(
+                            player.getProfile().getUuid(),
+                            20,
+                            EnumGameMode.SURVIVAL,
+                            player.getProfile(),
+                            player.getProfile().getName()
+                    ));
+                }}
+        ));
     }
 
     @Override

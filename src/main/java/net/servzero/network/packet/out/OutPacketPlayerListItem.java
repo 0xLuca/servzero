@@ -8,7 +8,6 @@ import net.servzero.server.game.EnumPlayerListAction;
 import net.servzero.server.player.GameProfile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

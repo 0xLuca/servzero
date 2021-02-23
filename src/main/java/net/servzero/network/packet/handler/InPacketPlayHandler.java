@@ -68,6 +68,6 @@ public class InPacketPlayHandler extends AbstractInPacketHandler {
 
     @Override
     public void handleKeepAlive(InPacketKeepAlive inPacketKeepAlive) {
-        Logger.info("KEEPALIVE");
+
     }
 }
