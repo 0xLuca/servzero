@@ -10,9 +10,10 @@ import net.servzero.server.player.GameProfile;
 import net.servzero.server.player.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-public class InPacketLoginHandler extends AbstractInPacketLoginHandler{
+public class InPacketLoginHandler extends AbstractInPacketLoginHandler {
     public InPacketLoginHandler(NetworkManager networkManager) {
         super(networkManager);
     }
@@ -38,19 +39,35 @@ public class InPacketLoginHandler extends AbstractInPacketLoginHandler{
         this.networkManager.sendPacket(new OutPacketHeldItemChange(1));
         this.networkManager.sendPacket(new OutPacketDifficulty(EnumDifficulty.PEACEFUL));
         this.networkManager.sendPacket(new OutPacketPositionLook(0, 10, 0, 0, 0, (byte) 0, 0));
+        List<Player> onlinePlayerList = Server.getInstance().getPlayerList();
         this.networkManager.sendPacket(new OutPacketPlayerListItem(
                 EnumPlayerListAction.ADD_PLAYER,
-                1,
+                onlinePlayerList.size(),
                 new ArrayList<>() {{
-                    add(new OutPacketPlayerListItem.PlayerListItem(
-                            player.getProfile().getUuid(),
+                    onlinePlayerList.forEach(onlinePlayer -> add(new OutPacketPlayerListItem.PlayerListItem(
+                            onlinePlayer.getUniqueId(),
                             20,
                             EnumGameMode.SURVIVAL,
-                            player.getProfile(),
-                            player.getProfile().getName()
-                    ));
+                            onlinePlayer.getProfile(),
+                            onlinePlayer.getName()
+                    )));
                 }}
         ));
+        onlinePlayerList.stream().filter(onlinePlayer -> !onlinePlayer.equals(player)).forEach(onlinePlayer -> {
+            onlinePlayer.networkManager.sendPacket(new OutPacketPlayerListItem(
+                    EnumPlayerListAction.ADD_PLAYER,
+                    1,
+                    new ArrayList<>() {{
+                        add(new OutPacketPlayerListItem.PlayerListItem(
+                                player.getUniqueId(),
+                                20,
+                                EnumGameMode.SURVIVAL,
+                                player.getProfile(),
+                                player.getName()
+                        ));
+                    }}
+            ));
+        });
         this.networkManager.sendPacket(new OutPacketPlayerAbilities(true, false, false, true, 1.0F, 0.0F));
     }
 
