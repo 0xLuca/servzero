@@ -3,9 +3,7 @@ package net.servzero.network.packet.serialization;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import io.netty.handler.codec.MessageToMessageDecoder;
 import net.servzero.network.NetworkManager;
-import net.servzero.network.packet.EnumPacket;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.protocol.EnumProtocolDirection;
 
@@ -13,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-public class PacketDecoder extends MessageToMessageDecoder<ByteBuf> {
+public class PacketDecoder extends ByteToMessageDecoder {
     private final EnumProtocolDirection direction;
 
     public PacketDecoder(EnumProtocolDirection direction) {

@@ -61,8 +61,8 @@ public class Connector {
                         networkManager.setPacketHandler(new InPacketHandshakeHandler(networkManager));
                     }
                 })
-                //.localAddress(address, port)
-                .bind(25565)
+                .localAddress(address, port)
+                .bind()
                 .syncUninterruptibly();
 
         Runtime.getRuntime().addShutdownHook(new Thread(eventLoopGroup::shutdownGracefully));

@@ -16,11 +16,12 @@ public class InPacketHandshakeHandler extends AbstractInPacketHandshakeHandler {
         switch (packet.getProtocol()) {
             case LOGIN:
                 this.networkManager.setProtocol(EnumProtocol.LOGIN);
+                this.networkManager.setPacketHandler(new InPacketLoginHandler(this.networkManager));
                 //TODO: Implement login
                 break;
             case STATUS:
                 this.networkManager.setProtocol(EnumProtocol.STATUS);
-                InPacketStatusStartHandler handler = new InPacketStatusStartHandler(this.networkManager);
+                InPacketStatusHandler handler = new InPacketStatusHandler(this.networkManager);
                 handler.setClientVersion(packet.getVersion());
                 this.networkManager.setPacketHandler(handler);
                 break;

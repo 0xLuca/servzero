@@ -1,13 +1,15 @@
 package net.servzero.network.packet.in;
 
 import net.servzero.network.packet.Packet;
-import net.servzero.network.packet.handler.InPacketStatusHandler;
+import net.servzero.network.packet.handler.InPacketLoginHandler;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
 
-public class InPacketStatusStart implements Packet<InPacketStatusHandler> {
+public class InPacketLoginStart implements Packet<InPacketLoginHandler> {
+    private String username;
+
     @Override
     public void read(PacketDataSerializer serializer) {
-
+        this.username = serializer.readString(16);
     }
 
     @Override
@@ -16,7 +18,11 @@ public class InPacketStatusStart implements Packet<InPacketStatusHandler> {
     }
 
     @Override
-    public void handle(InPacketStatusHandler handler) {
+    public void handle(InPacketLoginHandler handler) {
         handler.handle(this);
+    }
+
+    public String getUsername() {
+        return username;
     }
 }

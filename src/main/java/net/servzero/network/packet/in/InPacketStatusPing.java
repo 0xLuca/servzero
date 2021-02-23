@@ -4,10 +4,12 @@ import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.handler.InPacketStatusHandler;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
 
-public class InPacketStatusStart implements Packet<InPacketStatusHandler> {
+public class InPacketStatusPing implements Packet<InPacketStatusHandler> {
+    private long sentTime;
+
     @Override
     public void read(PacketDataSerializer serializer) {
-
+        this.sentTime = serializer.readLong();
     }
 
     @Override
@@ -18,5 +20,9 @@ public class InPacketStatusStart implements Packet<InPacketStatusHandler> {
     @Override
     public void handle(InPacketStatusHandler handler) {
         handler.handle(this);
+    }
+
+    public long getSentTime() {
+        return sentTime;
     }
 }

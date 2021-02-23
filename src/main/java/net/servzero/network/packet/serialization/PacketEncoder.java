@@ -4,14 +4,12 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import net.servzero.network.NetworkManager;
-import net.servzero.network.packet.EnumPacket;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.protocol.EnumProtocol;
 import net.servzero.network.protocol.EnumProtocolDirection;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.util.OptionalInt;
 
 public class PacketEncoder extends MessageToByteEncoder<Packet<?>> {
     private static final Logger a = net.servzero.logger.Logger.getLogger();
