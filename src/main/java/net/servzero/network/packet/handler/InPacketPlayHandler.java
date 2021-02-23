@@ -1,11 +1,14 @@
 package net.servzero.network.packet.handler;
 
+import net.servzero.chat.EnumChatType;
 import net.servzero.logger.Logger;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.in.*;
 import net.servzero.network.packet.in.player.InPacketPlayer;
 import net.servzero.network.packet.in.player.InPacketPlayerPosition;
 import net.servzero.network.packet.in.player.InPacketPlayerPositionLook;
+import net.servzero.network.packet.out.OutPacketChatMessage;
+import net.servzero.server.Server;
 import net.servzero.server.player.Player;
 
 public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
@@ -74,5 +77,10 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
     @Override
     public void handleChatMessage(InPacketChatMessage packet) {
         Logger.info("[Chat] " + this.player.getName()  + ": " + packet.getMessage());
+        Server.getInstance().getPlayerList().forEach(player ->
+                player.networkManager.sendPacket(new OutPacketChatMessage(
+                        this.player.getName() + ": " + packet.getMessage().replace("&", "§"),
+                        EnumChatType.CHAT
+                )));
     }
 }

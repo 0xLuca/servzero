@@ -24,6 +24,8 @@ public class PacketDecoder extends ByteToMessageDecoder {
             PacketDataSerializer packetDataSerializer = new PacketDataSerializer(byteBuf);
             int packetId = packetDataSerializer.readVarInt();
             if (Server.IGNORED_PACKETS.contains(packetId)) {
+                int length = packetDataSerializer.readableBytes();
+                packetDataSerializer.readBytes(length);
                 return;
             }
             Optional<? extends Packet<?>> optionalPacket = ctx.channel().attr(NetworkManager.protocolAttributeKey).get().getPacket(this.direction, packetId);

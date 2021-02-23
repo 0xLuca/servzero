@@ -14,6 +14,7 @@ public class Server implements Runnable {
 
     public static final List<Integer> IGNORED_PACKETS = new ArrayList<>() {{
         add(0x4D); // Advancements
+        add(0x07); // Window click
     }};
 
     public final Thread mainThread;
