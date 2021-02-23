@@ -5,13 +5,8 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 import net.servzero.logger.Logger;
 import net.servzero.network.packet.Packet;
-import net.servzero.network.packet.in.InPacketHandshakeSetProtocol;
-import net.servzero.network.packet.in.InPacketLoginStart;
-import net.servzero.network.packet.in.InPacketStatusPing;
-import net.servzero.network.packet.in.InPacketStatusStart;
-import net.servzero.network.packet.out.OutPacketLoginSuccess;
-import net.servzero.network.packet.out.OutPacketStatusPong;
-import net.servzero.network.packet.out.OutPacketStatusResponse;
+import net.servzero.network.packet.in.*;
+import net.servzero.network.packet.out.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -20,18 +15,29 @@ import java.util.Optional;
 
 public enum EnumProtocol {
     HANDSHAKING(-1) {{
-        this.addPacket(EnumProtocolDirection.TO_SERVER, InPacketHandshakeSetProtocol.class);
+        this.addPacket(0x00, EnumProtocolDirection.TO_SERVER, InPacketHandshakeSetProtocol.class);
     }},
-    PLAY(0),
+    PLAY(0) {{
+        this.addPacket(0x00, EnumProtocolDirection.TO_SERVER, InPacketTeleportConfirm.class);
+        this.addPacket(0x04, EnumProtocolDirection.TO_SERVER, InPacketClientSettings.class);
+        this.addPacket(0x09, EnumProtocolDirection.TO_SERVER, InPacketPluginMessage.class);
+        this.addPacket(0x0D, EnumProtocolDirection.TO_CLIENT, OutPacketDifficulty.class);
+        this.addPacket(0x1A, EnumProtocolDirection.TO_CLIENT, OutPacketDisconnect.class);
+        this.addPacket(0x1B, EnumProtocolDirection.TO_CLIENT, OutPacketEntityStatus.class);
+        this.addPacket(0x23, EnumProtocolDirection.TO_CLIENT, OutPacketJoinGame.class);
+        this.addPacket(0x2F, EnumProtocolDirection.TO_CLIENT, OutPacketPositionLook.class);
+        this.addPacket(0x3A, EnumProtocolDirection.TO_CLIENT, OutPacketHeldItemChange.class);
+    }},
     STATUS(1) {{
-        this.addPacket(EnumProtocolDirection.TO_SERVER, InPacketStatusStart.class);
-        this.addPacket(EnumProtocolDirection.TO_CLIENT, OutPacketStatusResponse.class);
-        this.addPacket(EnumProtocolDirection.TO_SERVER, InPacketStatusPing.class);
-        this.addPacket(EnumProtocolDirection.TO_CLIENT, OutPacketStatusPong.class);
+        this.addPacket(0x00, EnumProtocolDirection.TO_SERVER, InPacketStatusStart.class);
+        this.addPacket(0x01, EnumProtocolDirection.TO_SERVER, InPacketStatusPing.class);
+        this.addPacket(0x00, EnumProtocolDirection.TO_CLIENT, OutPacketStatusResponse.class);
+        this.addPacket(0x01, EnumProtocolDirection.TO_CLIENT, OutPacketStatusPong.class);
     }},
     LOGIN(2) {{
-        this.addPacket(EnumProtocolDirection.TO_SERVER, InPacketLoginStart.class);
-        this.addPacket(EnumProtocolDirection.TO_CLIENT, OutPacketLoginSuccess.class);
+        this.addPacket(0x00, EnumProtocolDirection.TO_SERVER, InPacketLoginStart.class);
+        this.addPacket(0x00, EnumProtocolDirection.TO_CLIENT, OutPacketLoginDisconnect.class);
+        this.addPacket(0x02, EnumProtocolDirection.TO_CLIENT, OutPacketLoginSuccess.class);
     }};
 
     public static EnumProtocol getById(int id) {
@@ -67,7 +73,7 @@ public enum EnumProtocol {
         return this.packets.get(direction).inverse().getOrDefault(packet.getClass(), -1);
     }
 
-    protected EnumProtocol addPacket(EnumProtocolDirection direction, Class<? extends Packet<?>> packet) {
+    protected EnumProtocol addPacket(int id, EnumProtocolDirection direction, Class<? extends Packet<?>> packet) {
         BiMap<Integer, Class<? extends Packet<?>>> map = this.packets.computeIfAbsent(direction, k -> HashBiMap.create());
 
         if (map.containsValue(packet)) {
@@ -75,7 +81,8 @@ public enum EnumProtocol {
             Logger.error(error);
             throw new IllegalArgumentException(error);
         } else {
-            map.put(map.size(), packet);
+//            map.put(map.size(), packet);
+            map.put(id, packet);
             return this;
         }
     }
