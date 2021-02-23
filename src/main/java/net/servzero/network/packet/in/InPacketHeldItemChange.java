@@ -6,12 +6,12 @@ import net.servzero.network.packet.serialization.PacketDataSerializer;
 
 import java.io.IOException;
 
-public class InPacketPlayer implements Packet<AbstractInPacketHandler> {
-    private boolean onGround;
+public class InPacketHeldItemChange implements Packet<AbstractInPacketHandler> {
+    private short slot;
 
     @Override
     public void read(PacketDataSerializer serializer) throws IOException {
-        this.onGround = serializer.readBoolean();
+        this.slot = serializer.readShort();
     }
 
     @Override
@@ -21,10 +21,10 @@ public class InPacketPlayer implements Packet<AbstractInPacketHandler> {
 
     @Override
     public void handle(AbstractInPacketHandler handler) {
-
+        handler.handleHeldItemChange(this);
     }
 
-    public boolean isOnGround() {
-        return onGround;
+    public short getSlot() {
+        return slot;
     }
 }

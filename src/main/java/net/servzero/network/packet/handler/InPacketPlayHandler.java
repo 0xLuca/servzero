@@ -1,9 +1,10 @@
 package net.servzero.network.packet.handler;
 
-import net.servzero.logger.Logger;
-import net.servzero.network.NetworkManager;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.in.*;
+import net.servzero.network.packet.in.player.InPacketPlayer;
+import net.servzero.network.packet.in.player.InPacketPlayerPosition;
+import net.servzero.network.packet.in.player.InPacketPlayerPositionLook;
 import net.servzero.server.player.Player;
 
 public class InPacketPlayHandler extends AbstractInPacketHandler {
@@ -36,6 +37,31 @@ public class InPacketPlayHandler extends AbstractInPacketHandler {
 
     @Override
     public void handleTeleportConfirm(InPacketTeleportConfirm packet) {
+
+    }
+
+    @Override
+    public void handlePlayer(InPacketPlayer packet) {
+
+    }
+
+    @Override
+    public void handlePlayerPosition(InPacketPlayerPosition packet) {
+
+    }
+
+    @Override
+    public void handlePlayerPositionLook(InPacketPlayerPositionLook packet) {
+
+    }
+
+    @Override
+    public void handleHeldItemChange(InPacketHeldItemChange packet) {
+
+    }
+
+    @Override
+    public void handleAnimation(InPacketAnimation inPacketAnimation) {
 
     }
 }

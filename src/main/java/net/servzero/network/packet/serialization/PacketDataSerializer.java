@@ -60,13 +60,12 @@ public class PacketDataSerializer extends ByteBuf {
         }
     }
 
-    public PacketDataSerializer writeVarIntArray(int[] aint) {
-        this.writeVarInt(aint.length);
-        int[] aint1 = aint;
-        int i = aint.length;
+    public PacketDataSerializer writeVarIntArray(int[] varIntArray) {
+        this.writeVarInt(varIntArray.length);
+        int i = varIntArray.length;
 
         for (int j = 0; j < i; ++j) {
-            int k = aint1[j];
+            int k = varIntArray[j];
 
             this.writeVarInt(k);
         }
@@ -94,13 +93,12 @@ public class PacketDataSerializer extends ByteBuf {
         }
     }
 
-    public PacketDataSerializer writeLongArray(long[] along) {
-        this.writeVarInt(along.length);
-        long[] along1 = along;
-        int i = along.length;
+    public PacketDataSerializer writeLongArray(long[] varLongArray) {
+        this.writeVarInt(varLongArray.length);
+        int i = varLongArray.length;
 
         for (int j = 0; j < i; ++j) {
-            long k = along1[j];
+            long k = varLongArray[j];
 
             this.writeLong(k);
         }

@@ -6,6 +6,9 @@ import com.google.common.collect.Maps;
 import net.servzero.logger.Logger;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.in.*;
+import net.servzero.network.packet.in.player.InPacketPlayer;
+import net.servzero.network.packet.in.player.InPacketPlayerPosition;
+import net.servzero.network.packet.in.player.InPacketPlayerPositionLook;
 import net.servzero.network.packet.out.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -22,6 +25,11 @@ public enum EnumProtocol {
         this.addPacket(0x04, EnumProtocolDirection.TO_SERVER, InPacketClientSettings.class);
         this.addPacket(0x08, EnumProtocolDirection.TO_SERVER, InPacketCloseWindow.class);
         this.addPacket(0x09, EnumProtocolDirection.TO_SERVER, InPacketPluginMessage.class);
+        this.addPacket(0x0C, EnumProtocolDirection.TO_SERVER, InPacketPlayer.class);
+        this.addPacket(0x0D, EnumProtocolDirection.TO_SERVER, InPacketPlayerPosition.class);
+        this.addPacket(0x0E, EnumProtocolDirection.TO_SERVER, InPacketPlayerPositionLook.class);
+        this.addPacket(0x1A, EnumProtocolDirection.TO_SERVER, InPacketHeldItemChange.class);
+        this.addPacket(0x1D, EnumProtocolDirection.TO_SERVER, InPacketAnimation.class);
         this.addPacket(0x0D, EnumProtocolDirection.TO_CLIENT, OutPacketDifficulty.class);
         this.addPacket(0x1A, EnumProtocolDirection.TO_CLIENT, OutPacketDisconnect.class);
         this.addPacket(0x1B, EnumProtocolDirection.TO_CLIENT, OutPacketEntityStatus.class);
