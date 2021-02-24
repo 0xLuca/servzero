@@ -10,8 +10,8 @@ public class OutPacketEntityRelativeMoveLook extends OutPacketEntityRelativeMove
 
     public OutPacketEntityRelativeMoveLook(int entityId, short deltaX, short deltaY, short deltaZ, float yaw, float pitch, boolean onGround) {
         super(entityId, deltaX, deltaY, deltaZ, onGround);
-        this.yawAngle = (byte) (yaw * 256.0F / 360); // (byte)((int) yaw * 256.0F / 360.0F);
-        this.pitchAngle = (byte) (pitch * 256.0F / 360); // (byte)((int) pitch * 256.0F / 360.0F);
+        this.yawAngle = (byte)((int) yaw * 256.0F / 360.0F);
+        this.pitchAngle = (byte)((int) pitch * 256.0F / 360.0F);
     }
 
     @Override

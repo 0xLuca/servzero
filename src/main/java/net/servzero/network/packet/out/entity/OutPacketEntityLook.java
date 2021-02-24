@@ -5,22 +5,22 @@ import net.servzero.network.packet.serialization.PacketDataSerializer;
 import java.io.IOException;
 
 public class OutPacketEntityLook extends OutPacketEntity {
-    private float yaw;
-    private float pitch;
+    private byte yawAngle;
+    private byte pitchAngle;
     private boolean onGround;
 
     public OutPacketEntityLook(int entityId, float yaw, float pitch, boolean onGround) {
         super(entityId);
-        this.yaw = yaw;
-        this.pitch = pitch;
+        this.yawAngle = (byte) ((yaw * 256.0F) / 360.0F);
+        this.pitchAngle = (byte) ((pitch * 256.0F) / 360.0F);
         this.onGround = onGround;
     }
 
     @Override
     public void write(PacketDataSerializer serializer) throws IOException {
         super.write(serializer);
-        serializer.writeFloat(yaw);
-        serializer.writeFloat(pitch);
+        serializer.writeByte(yawAngle);
+        serializer.writeByte(pitchAngle);
         serializer.writeBoolean(onGround);
     }
 }

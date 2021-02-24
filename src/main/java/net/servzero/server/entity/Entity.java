@@ -1,5 +1,7 @@
 package net.servzero.server.entity;
 
+import net.servzero.logger.Logger;
+import net.servzero.network.packet.out.entity.OutPacketEntityHeadLook;
 import net.servzero.network.packet.out.entity.OutPacketEntityRelativeMoveLook;
 import net.servzero.server.Server;
 import net.servzero.server.world.Location;
@@ -60,6 +62,7 @@ public class Entity {
                     this.location.getPitch(),
                     true
             ));
+            player.networkManager.sendPacket(new OutPacketEntityHeadLook(this.id, this.location.getYaw()));
         });
     }
 
