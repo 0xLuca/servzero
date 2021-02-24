@@ -2,8 +2,10 @@ package net.servzero.server.player;
 
 import net.servzero.network.packet.handler.InPacketPlayHandler;
 import net.servzero.network.packet.out.*;
+import net.servzero.network.packet.out.player.OutPacketPlayerPositionLook;
 import net.servzero.server.Server;
 import net.servzero.server.game.*;
+import net.servzero.server.world.Location;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,8 @@ public class PlayerLoginManager {
         ));
         player.networkManager.sendPacket(new OutPacketHeldItemChange(1));
         player.networkManager.sendPacket(new OutPacketDifficulty(EnumDifficulty.PEACEFUL));
-        player.networkManager.sendPacket(new OutPacketPositionLook(0, 10, 0, 0, 0, (byte) 0, 0));
+        player.networkManager.sendPacket(new OutPacketChunkData());
+        player.networkManager.sendPacket(new OutPacketPlayerPositionLook(0, 28, 0, 0, 0, (byte) 0));
         List<Player> onlinePlayerList = Server.getInstance().getPlayerList();
         player.networkManager.sendPacket(new OutPacketPlayerListItem(
                 EnumPlayerListAction.ADD_PLAYER,
@@ -58,5 +61,7 @@ public class PlayerLoginManager {
             ));
         });
         player.networkManager.sendPacket(new OutPacketPlayerAbilities(true, false, false, true, 1.0F, 0.0F));
+
+        Server.getInstance().getWorld().spawn(player, new Location(Server.getInstance().getWorld(), 0, 28, 0, 0, 0));
     }
 }

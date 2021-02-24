@@ -11,6 +11,7 @@ public class Player extends Entity {
     public final NetworkManager networkManager;
 
     public Player(GameProfile profile, NetworkManager networkManager) {
+        super();
         this.profile = profile;
         this.networkManager = networkManager;
     }
