@@ -13,6 +13,7 @@ import java.util.List;
 
 import net.servzero.server.world.block.Block;
 import net.servzero.server.world.block.Coordinate;
+import net.servzero.server.world.block.Material;
 import net.servzero.server.world.chunk.Chunk;
 
 import java.util.HashMap;
@@ -37,7 +38,7 @@ public class World {
             if(!chunkMap.containsKey(chunkCoord))
                 chunkMap.put(chunkCoord, chunk1);
 
-            Block block = new Block();
+            Block block = new Block(new Coordinate(i, 0, 0), Material.STONE);
             Chunk chunk = chunkMap.get(chunkCoord);
             assert chunk != null;
             chunk1.addBlock(new Coordinate(i, 0), block);

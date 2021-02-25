@@ -5,6 +5,7 @@ import net.servzero.network.packet.PacketHandler;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
 import net.servzero.server.world.block.Block;
 import net.servzero.server.world.block.Coordinate;
+import net.servzero.server.world.block.Material;
 import net.servzero.server.world.chunk.ChunkSection;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.Properties;
 
 import com.flowpowered.nbt.*;
 import com.flowpowered.nbt.stream.NBTOutputStream;
+import org.checkerframework.checker.units.qual.C;
 
 import java.io.ByteArrayOutputStream;
 
@@ -45,7 +47,9 @@ public class OutPacketChunkData implements Packet<PacketHandler> {
     @Override
     public void write(PacketDataSerializer serializer) throws IOException {
 
+        /*
         serializer.writeInt(0); // Chunk X
+
         serializer.writeInt(0); // Chunk Y
         serializer.writeBoolean(true);  //Full chunk
         serializer.writeVarInt(1);  //Bitmask of chunk sections
@@ -63,13 +67,13 @@ public class OutPacketChunkData implements Packet<PacketHandler> {
 
 
         ChunkSection chunkSection = new ChunkSection();
-        chunkSection.addBlock(new Coordinate(0, 0, 0), new Block());
+        chunkSection.addBlock(new Coordinate(0, 0, 0), new Block(new Coordinate(0, 0, 0), Material.STONE));
 
         serializer.writeBytes(chunkSection.toByteArray());
         serializer.writeVarInt(0);
         return;
+*/
 
-        /*
         serializer.writeInt(0);
 
         serializer.writeInt(0);
@@ -78,7 +82,7 @@ public class OutPacketChunkData implements Packet<PacketHandler> {
         serializer.writeVarInt(data.length);
         serializer.writeBytes(data);
         serializer.writeVarInt(0);
-        */
+
     }
 
     @Override

@@ -2,6 +2,7 @@
 .gradletasknamecache
 **/build/
 !src/**/build/
+.idea/
 .idea/**/gradle.xml
 .idea/**/libraries
 .idea/**/dataSources/

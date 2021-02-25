@@ -20,6 +20,7 @@ public class Chunk {
             //not in this chunk. big problem for them, not for us
             return -1;
         }
+        block.setSection(sections[(int)Math.floor(coord.getY()/16.0)]);
         int chunkSelectionNum = (int) Math.floor(coord.getY()/16.0);
         ChunkSection section = sections[chunkSelectionNum];
         section.addBlock(coord, block);
