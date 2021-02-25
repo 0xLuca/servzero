@@ -24,12 +24,12 @@ public class PacketDecoder extends ByteToMessageDecoder {
             PacketDataSerializer packetDataSerializer = new PacketDataSerializer(byteBuf);
             int packetId = packetDataSerializer.readVarInt();
             if (Server.IGNORED_PACKETS.contains(packetId)) {
-                int length = packetDataSerializer.readableBytes();
-                packetDataSerializer.readBytes(length);
+                removeOverflow(packetDataSerializer);
                 return;
             }
             Optional<? extends Packet<?>> optionalPacket = ctx.channel().attr(NetworkManager.protocolAttributeKey).get().getPacket(this.direction, packetId);
             if (optionalPacket.isEmpty()) {
+                removeOverflow(packetDataSerializer);
                 throw new IOException("Bad packet id: " + packetId);
             } else {
                 Packet<?> packet = optionalPacket.get();
@@ -41,5 +41,10 @@ public class PacketDecoder extends ByteToMessageDecoder {
                 }
             }
         }
+    }
+
+    private void removeOverflow(ByteBuf message) {
+        int length = message.readableBytes();
+        message.readBytes(length);
     }
 }

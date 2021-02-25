@@ -7,9 +7,13 @@ import net.servzero.logger.Logger;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.in.*;
 import net.servzero.network.packet.in.player.InPacketPlayer;
+import net.servzero.network.packet.in.player.InPacketPlayerLook;
 import net.servzero.network.packet.in.player.InPacketPlayerPosition;
 import net.servzero.network.packet.in.player.InPacketPlayerPositionLook;
 import net.servzero.network.packet.out.*;
+import net.servzero.network.packet.out.entity.*;
+import net.servzero.network.packet.out.player.OutPacketPlayerPositionLook;
+import net.servzero.network.packet.out.player.OutPacketSpawnPlayer;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -30,18 +34,26 @@ public enum EnumProtocol {
         this.addPacket(0x0C, EnumProtocolDirection.TO_SERVER, InPacketPlayer.class);
         this.addPacket(0x0D, EnumProtocolDirection.TO_SERVER, InPacketPlayerPosition.class);
         this.addPacket(0x0E, EnumProtocolDirection.TO_SERVER, InPacketPlayerPositionLook.class);
+        this.addPacket(0x0F, EnumProtocolDirection.TO_SERVER, InPacketPlayerLook.class);
         this.addPacket(0x1A, EnumProtocolDirection.TO_SERVER, InPacketHeldItemChange.class);
         this.addPacket(0x1D, EnumProtocolDirection.TO_SERVER, InPacketAnimation.class);
+        this.addPacket(0x05, EnumProtocolDirection.TO_CLIENT, OutPacketSpawnPlayer.class);
         this.addPacket(0x0D, EnumProtocolDirection.TO_CLIENT, OutPacketDifficulty.class);
         this.addPacket(0x0F, EnumProtocolDirection.TO_CLIENT, OutPacketChatMessage.class);
         this.addPacket(0x1A, EnumProtocolDirection.TO_CLIENT, OutPacketDisconnect.class);
         this.addPacket(0x1B, EnumProtocolDirection.TO_CLIENT, OutPacketEntityStatus.class);
         this.addPacket(0x1F, EnumProtocolDirection.TO_CLIENT, OutPacketKeepAlive.class);
-        this.addPacket(0x22, EnumProtocolDirection.TO_CLIENT, OutPacketChunkData.class);
+        this.addPacket(0x20, EnumProtocolDirection.TO_CLIENT, OutPacketChunkData.class);
         this.addPacket(0x23, EnumProtocolDirection.TO_CLIENT, OutPacketJoinGame.class);
+        this.addPacket(0x25, EnumProtocolDirection.TO_CLIENT, OutPacketEntity.class);
+        this.addPacket(0x26, EnumProtocolDirection.TO_CLIENT, OutPacketEntityRelativeMove.class);
+        this.addPacket(0x27, EnumProtocolDirection.TO_CLIENT, OutPacketEntityRelativeMoveLook.class);
+        this.addPacket(0x28, EnumProtocolDirection.TO_CLIENT, OutPacketEntityLook.class);
         this.addPacket(0x2C, EnumProtocolDirection.TO_CLIENT, OutPacketPlayerAbilities.class);
         this.addPacket(0x2E, EnumProtocolDirection.TO_CLIENT, OutPacketPlayerListItem.class);
-        this.addPacket(0x2F, EnumProtocolDirection.TO_CLIENT, OutPacketPositionLook.class);
+        this.addPacket(0x2F, EnumProtocolDirection.TO_CLIENT, OutPacketPlayerPositionLook.class);
+        this.addPacket(0x32, EnumProtocolDirection.TO_CLIENT, OutPacketDestroyEntities.class);
+        this.addPacket(0x36, EnumProtocolDirection.TO_CLIENT, OutPacketEntityHeadLook.class);
         this.addPacket(0x3A, EnumProtocolDirection.TO_CLIENT, OutPacketHeldItemChange.class);
     }},
     STATUS(1) {{

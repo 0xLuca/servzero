@@ -2,13 +2,13 @@ package net.servzero.server;
 
 import net.servzero.logger.Logger;
 import net.servzero.network.packet.out.OutPacketPlayerListItem;
+import net.servzero.server.game.EnumDimension;
 import net.servzero.server.game.EnumGameMode;
 import net.servzero.server.game.EnumPlayerListAction;
 import net.servzero.server.player.Player;
 import net.servzero.server.player.PlayerLogoutManager;
 import net.servzero.server.ticker.KeepAliveTicker;
 import net.servzero.server.world.World;
-import net.servzero.server.world.block.Coordinate;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -25,14 +25,15 @@ public class Server implements Runnable {
 
     public final Thread mainThread;
     public Thread keepAliveThread;
-    private Connector connector;
-    private World world;
+    private final Connector connector;
     private boolean running;
-    private List<Player> playerList = new ArrayList<>();
+    private final List<Player> playerList = new ArrayList<>();
+    private final World primaryWorld;
 
     private Server() {
         this.connector = new Connector();
-        this.world = new World();
+        this.primaryWorld = new World("main world", EnumDimension.OVERWORLD);
+
         this.mainThread = new Thread(this, "Server thread");
         registerWorkers();
     }
@@ -48,7 +49,6 @@ public class Server implements Runnable {
 
     public boolean start() {
         Logger.info("Starting Server...");
-        world.generate(new Coordinate(0, 0));
 
         try {
             connector.initialize(null, 25565);
@@ -89,6 +89,11 @@ public class Server implements Runnable {
 
     public void unregisterPlayer(Player player) {
         this.playerList.remove(player);
+        this.primaryWorld.leave(player);
         Logger.info("Player " + player.getName() + " left.");
+    }
+
+    public World getWorld() {
+        return this.primaryWorld;
     }
 }

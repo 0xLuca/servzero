@@ -5,6 +5,7 @@ import net.servzero.logger.Logger;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.in.*;
 import net.servzero.network.packet.in.player.InPacketPlayer;
+import net.servzero.network.packet.in.player.InPacketPlayerLook;
 import net.servzero.network.packet.in.player.InPacketPlayerPosition;
 import net.servzero.network.packet.in.player.InPacketPlayerPositionLook;
 import net.servzero.network.packet.out.OutPacketChatMessage;
@@ -51,12 +52,30 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
 
     @Override
     public void handlePlayerPosition(InPacketPlayerPosition packet) {
+        this.player.updateLocation(() -> {
+            this.player.getLocation().setX(packet.getX());
+            this.player.getLocation().setY(packet.getY());
+            this.player.getLocation().setZ(packet.getZ());
+        });
+    }
 
+    @Override
+    public void handlePlayerLook(InPacketPlayerLook packet) {
+        this.player.updateLocation(() -> {
+            this.player.getLocation().setYaw(packet.getYaw());
+            this.player.getLocation().setPitch(packet.getPitch());
+        });
     }
 
     @Override
     public void handlePlayerPositionLook(InPacketPlayerPositionLook packet) {
-
+        this.player.updateLocation(() -> {
+            this.player.getLocation().setX(packet.getX());
+            this.player.getLocation().setY(packet.getY());
+            this.player.getLocation().setZ(packet.getZ());
+            this.player.getLocation().setYaw(packet.getYaw());
+            this.player.getLocation().setPitch(packet.getPitch());
+        });
     }
 
     @Override
@@ -65,12 +84,12 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
     }
 
     @Override
-    public void handleAnimation(InPacketAnimation inPacketAnimation) {
+    public void handleAnimation(InPacketAnimation packet) {
 
     }
 
     @Override
-    public void handleKeepAlive(InPacketKeepAlive inPacketKeepAlive) {
+    public void handleKeepAlive(InPacketKeepAlive packet) {
 
     }
 
