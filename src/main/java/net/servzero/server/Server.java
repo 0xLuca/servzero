@@ -5,6 +5,7 @@ import net.servzero.network.packet.out.OutPacketPlayerListItem;
 import net.servzero.server.game.EnumGameMode;
 import net.servzero.server.game.EnumPlayerListAction;
 import net.servzero.server.player.Player;
+import net.servzero.server.player.PlayerLogoutManager;
 import net.servzero.server.ticker.KeepAliveTicker;
 import net.servzero.server.world.World;
 import net.servzero.server.world.block.Coordinate;
@@ -89,18 +90,5 @@ public class Server implements Runnable {
     public void unregisterPlayer(Player player) {
         this.playerList.remove(player);
         Logger.info("Player " + player.getName() + " left.");
-        this.playerList.forEach(onlinePlayer -> onlinePlayer.networkManager.sendPacket(new OutPacketPlayerListItem(
-                EnumPlayerListAction.REMOVE_PLAYER,
-                1,
-                new ArrayList<>() {{
-                    add(new OutPacketPlayerListItem.PlayerListItem(
-                            player.getUniqueId(),
-                            20,
-                            EnumGameMode.SURVIVAL,
-                            player.getProfile(),
-                            player.getName()
-                    ));
-                }}
-        )));
     }
 }
