@@ -37,6 +37,7 @@ public enum EnumProtocol {
         this.addPacket(0x1A, EnumProtocolDirection.TO_CLIENT, OutPacketDisconnect.class);
         this.addPacket(0x1B, EnumProtocolDirection.TO_CLIENT, OutPacketEntityStatus.class);
         this.addPacket(0x1F, EnumProtocolDirection.TO_CLIENT, OutPacketKeepAlive.class);
+        this.addPacket(0x22, EnumProtocolDirection.TO_CLIENT, OutPacketChunkData.class);
         this.addPacket(0x23, EnumProtocolDirection.TO_CLIENT, OutPacketJoinGame.class);
         this.addPacket(0x2C, EnumProtocolDirection.TO_CLIENT, OutPacketPlayerAbilities.class);
         this.addPacket(0x2E, EnumProtocolDirection.TO_CLIENT, OutPacketPlayerListItem.class);
