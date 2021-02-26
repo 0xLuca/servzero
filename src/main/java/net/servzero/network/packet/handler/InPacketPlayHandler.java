@@ -8,8 +8,10 @@ import net.servzero.network.packet.in.player.InPacketPlayer;
 import net.servzero.network.packet.in.player.InPacketPlayerLook;
 import net.servzero.network.packet.in.player.InPacketPlayerPosition;
 import net.servzero.network.packet.in.player.InPacketPlayerPositionLook;
+import net.servzero.network.packet.out.OutPacketAnimation;
 import net.servzero.network.packet.out.OutPacketChatMessage;
 import net.servzero.server.Server;
+import net.servzero.server.game.EnumAnimationAction;
 import net.servzero.server.player.Player;
 
 public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
@@ -52,7 +54,7 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
 
     @Override
     public void handlePlayerPosition(InPacketPlayerPosition packet) {
-        this.player.updateLocation(() -> {
+        this.player.updateLocationAndSend(() -> {
             this.player.getLocation().setX(packet.getX());
             this.player.getLocation().setY(packet.getY());
             this.player.getLocation().setZ(packet.getZ());
@@ -61,7 +63,7 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
 
     @Override
     public void handlePlayerLook(InPacketPlayerLook packet) {
-        this.player.updateLocation(() -> {
+        this.player.updateLocationAndSend(() -> {
             this.player.getLocation().setYaw(packet.getYaw());
             this.player.getLocation().setPitch(packet.getPitch());
         });
@@ -69,7 +71,7 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
 
     @Override
     public void handlePlayerPositionLook(InPacketPlayerPositionLook packet) {
-        this.player.updateLocation(() -> {
+        this.player.updateLocationAndSend(() -> {
             this.player.getLocation().setX(packet.getX());
             this.player.getLocation().setY(packet.getY());
             this.player.getLocation().setZ(packet.getZ());
@@ -85,7 +87,21 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
 
     @Override
     public void handleAnimation(InPacketAnimation packet) {
+        final int action;
+        switch (packet.getHand()) {
+            case RIGHT:
+                action = EnumAnimationAction.SWING_MAIN_HAND.getId();
+                break;
+            case LEFT:
+                action = EnumAnimationAction.SWING_OFF_HAND.getId();
+                break;
+            default:
+                action = -1;
+        }
 
+        Server.getInstance().getPlayerList().stream().filter(onlinePlayer -> !onlinePlayer.equals(this.player)).forEach(onlinePlayer -> {
+            onlinePlayer.networkManager.sendPacket(new OutPacketAnimation(this.player.getId(), action));
+        });
     }
 
     @Override

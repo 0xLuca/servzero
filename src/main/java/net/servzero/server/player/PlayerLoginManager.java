@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class PlayerLoginManager {
     public static void login(Player player) {
         GameProfile profile = player.getProfile();
+        Location spawnLocation = new Location(Server.getInstance().getWorld(), 0, 1, 0, 0, 0);
 
         //TODO: Send real information
 
@@ -37,7 +38,13 @@ public class PlayerLoginManager {
 
         Server.getInstance().getWorld().getChunkList().forEach(chunk -> player.networkManager.sendPacket(new OutPacketChunkData(chunk)));
 
-        player.networkManager.sendPacket(new OutPacketPlayerPositionLook(0, 1, 0, 0, 0, (byte) 0));
+        player.networkManager.sendPacket(new OutPacketPlayerPositionLook(
+                spawnLocation.getX(),
+                spawnLocation.getY(),
+                spawnLocation.getZ(),
+                spawnLocation.getYaw(),
+                spawnLocation.getPitch(),
+                (byte) 0));
         List<Player> onlinePlayerList = Server.getInstance().getPlayerList();
         player.networkManager.sendPacket(new OutPacketPlayerListItem(
                 EnumPlayerListAction.ADD_PLAYER,
@@ -69,6 +76,6 @@ public class PlayerLoginManager {
         });
         player.networkManager.sendPacket(new OutPacketPlayerAbilities(true, false, true, false, 0.1F, 0.0F));
 
-        Server.getInstance().getWorld().spawn(player, new Location(Server.getInstance().getWorld(), 0, 28, 0, 0, 0));
+        Server.getInstance().getWorld().spawn(player, spawnLocation);
     }
 }

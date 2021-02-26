@@ -16,7 +16,7 @@ public class OutPacketEntityTeleport implements Packet<PacketHandler> {
     private final byte pitchAngle;
     private final boolean onGround;
 
-    public OutPacketEntityTeleport(int entityId, double x, double y, double z, byte yaw, byte pitch, boolean onGround) {
+    public OutPacketEntityTeleport(int entityId, double x, double y, double z, float yaw, float pitch, boolean onGround) {
         this.entityId = entityId;
         this.x = x;
         this.y = y;
