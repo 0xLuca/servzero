@@ -1,5 +1,6 @@
 package net.servzero.network.packet.out.entity;
 
+import net.servzero.helper.AngleHelper;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.PacketHandler;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
@@ -12,7 +13,7 @@ public class OutPacketEntityHeadLook implements Packet<PacketHandler> {
 
     public OutPacketEntityHeadLook(int entityId, float yaw) {
         this.entityId = entityId;
-        this.yawAngle = (byte) ((yaw * 256.0F) / 360.0F);
+        this.yawAngle = AngleHelper.getAngleFromRotation(yaw);
     }
 
     @Override

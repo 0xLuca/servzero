@@ -5,15 +5,18 @@ public class Coordinate {
     private int y;
     private int z;
 
-    public Coordinate(int x, int y, int z) {
+    private Coordinate(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
-    public Coordinate(int x, int y) {
-        this.x = x;
-        this.y = y;
-        this.z = 0;
+
+    public static Coordinate get(int x, int y, int z) {
+        return new Coordinate(x, y, z);
+    }
+
+    public static Coordinate get(double x, double y, double z) {
+        return get((int) x, (int) y, (int) z);
     }
 
     public int getX() {
@@ -41,6 +44,6 @@ public class Coordinate {
     }
 
     public Coordinate toChunkCoord() {
-        return new Coordinate ((int) Math.floor(this.x/16.0), (int) Math.floor(this.y/16.0), (int) Math.floor(this.z/16.0));
+        return Coordinate.get((int) Math.floor(this.x/16.0), (int) Math.floor(this.y/16.0), (int) Math.floor(this.z/16.0));
     }
 }

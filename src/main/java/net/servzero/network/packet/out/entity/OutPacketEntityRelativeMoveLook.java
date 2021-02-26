@@ -1,5 +1,6 @@
 package net.servzero.network.packet.out.entity;
 
+import net.servzero.helper.AngleHelper;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
 
 import java.io.IOException;
@@ -10,8 +11,8 @@ public class OutPacketEntityRelativeMoveLook extends OutPacketEntityRelativeMove
 
     public OutPacketEntityRelativeMoveLook(int entityId, short deltaX, short deltaY, short deltaZ, float yaw, float pitch, boolean onGround) {
         super(entityId, deltaX, deltaY, deltaZ, onGround);
-        this.yawAngle = (byte)((int) yaw * 256.0F / 360.0F);
-        this.pitchAngle = (byte)((int) pitch * 256.0F / 360.0F);
+        this.yawAngle = AngleHelper.getAngleFromRotation(yaw);
+        this.pitchAngle = AngleHelper.getAngleFromRotation(pitch);
     }
 
     @Override

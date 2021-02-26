@@ -3,40 +3,16 @@ package net.servzero.network.packet.out;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.PacketHandler;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
-import net.servzero.server.world.block.Block;
-import net.servzero.server.world.block.Coordinate;
-import net.servzero.server.world.block.Material;
 import net.servzero.server.world.chunk.Chunk;
-import net.servzero.server.world.chunk.ChunkSection;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
-import com.flowpowered.nbt.*;
-import com.flowpowered.nbt.stream.NBTOutputStream;
-import org.checkerframework.checker.units.qual.C;
-
-import java.io.ByteArrayOutputStream;
 
 
 public class OutPacketChunkData implements Packet<PacketHandler> {
-    private byte[] data = new byte[] {};
+    private final Chunk chunk;
 
-    public OutPacketChunkData() {
-        Properties properties = new Properties();
-        InputStream fileStream = getClass().getResourceAsStream("/bytes.properties");
-        try {
-            properties.load(fileStream);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-        String data = properties.getProperty("data");
-        String[] split = data.split(", ");
-        this.data = new byte[split.length];
-        for (int i = 0; i < split.length; i++) {
-            this.data[i] = Byte.parseByte(split[i]);
-        }
+    public OutPacketChunkData(Chunk chunk) {
+        this.chunk = chunk;
     }
 
     @Override
@@ -46,39 +22,7 @@ public class OutPacketChunkData implements Packet<PacketHandler> {
 
     @Override
     public void write(PacketDataSerializer serializer) throws IOException {
-
-        /*
-        serializer.writeInt(0); // Chunk X
-
-        serializer.writeInt(0); // Chunk Y
-        serializer.writeBoolean(true);  //Full chunk
-        serializer.writeVarInt(1);  //Bitmask of chunk sections
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        NBTOutputStream os = new NBTOutputStream(outputStream, false);
-        CompoundTag ct = new CompoundTag("",new CompoundMap());
-        os.writeTag(ct);
-        os.flush();
-        os.close();
-        serializer.writeBytes(outputStream.toByteArray());  //heightmaps
-
-        serializer.writeVarInt(0); // Biomes array length
-        // ...                      // Biomes array
-
-
-        ChunkSection chunkSection = new ChunkSection();
-        chunkSection.addBlock(new Coordinate(0, 0, 0), new Block(new Coordinate(0, 0, 0), Material.STONE));
-
-        serializer.writeBytes(chunkSection.toByteArray());
-        serializer.writeVarInt(0);
-        return;
-*/
-
-        Chunk c = new Chunk();
-        c.write(serializer);
-        /*serializer.writeVarInt(data.length);
-        serializer.writeBytes(data);*/
-
+        chunk.write(serializer);
     }
 
     @Override

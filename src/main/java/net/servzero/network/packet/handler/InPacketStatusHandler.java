@@ -25,7 +25,7 @@ public class InPacketStatusHandler extends AbstractInPacketStatusHandler {
                     add(new PingResponse.PlayerInfoItem("Name2", UUID.randomUUID()));
                     add(new PingResponse.PlayerInfoItem("Name3", UUID.randomUUID()));
                 }}),
-                new PingResponse.Description("Testserver"),
+                new PingResponse.Description("Not A Minecraft Server"),
                  ""
         );
         networkManager.sendPacket(new OutPacketStatusResponse(response));

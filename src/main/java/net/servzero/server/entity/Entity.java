@@ -5,6 +5,7 @@ import net.servzero.network.packet.out.entity.OutPacketEntityHeadLook;
 import net.servzero.network.packet.out.entity.OutPacketEntityRelativeMoveLook;
 import net.servzero.server.Server;
 import net.servzero.server.world.Location;
+import net.servzero.server.world.block.Coordinate;
 
 public class Entity {
     private static volatile int entityIdCounter = 0;
@@ -41,7 +42,12 @@ public class Entity {
         this.lastLocation = this.location == null ? null : this.location.clone();
         runnable.run();
         if (this.lastLocation == null) {
-            this.lastLocation = location;
+            this.lastLocation = this.location;
+        } else {
+            if (!this.location.getWorld().isChunkLoaded(Coordinate.get(this.location.getX(), this.location.getY(), this.location.getZ()))) {
+
+                return;
+            }
         }
         final double currentX = this.location.getX();
         final double currentY = this.location.getY();

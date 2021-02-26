@@ -1,6 +1,8 @@
 package net.servzero.server.world.block;
 
 public class BlockState {
+    public static BlockState EMPTY = new BlockState(0, 0);
+
     private int id;
     private int data;
 
@@ -9,11 +11,11 @@ public class BlockState {
         this.data = data;
     }
 
-    public static int getGlobalPalleteIDFromState(BlockState state) {
-        return (state.getId() << 4) | state.getData();
+    public int toGlobalId() {
+        return (this.id << 4) | this.data;
     }
 
-    public static BlockState getStateFromGlobalPalleteId(int id) {
+    public static BlockState fromGlobalId(int id) {
         return new BlockState(id >> 4, id & 0x0F);
     }
 

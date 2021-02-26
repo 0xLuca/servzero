@@ -7,42 +7,43 @@ import net.servzero.server.Server;
 import net.servzero.server.entity.Entity;
 import net.servzero.server.game.EnumDimension;
 import net.servzero.server.player.Player;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import net.servzero.server.world.block.Block;
+import net.servzero.server.world.block.Blocks;
 import net.servzero.server.world.block.Coordinate;
-import net.servzero.server.world.block.Material;
 import net.servzero.server.world.chunk.Chunk;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class World {
     private final String name;
     private final EnumDimension dimension;
     private final List<Entity> entityList = new ArrayList<>();
+    private final List<Chunk> chunkList = new ArrayList<>();
 
     public World(String name, EnumDimension dimension) {
         this.name = name;
         this.dimension = dimension;
+        generate();
     }
-    private Map<Coordinate, Chunk> chunkMap = new HashMap<>();
-    public void generate(Coordinate coord) {
+
+    public void generate() {
         //TODO: Implement world generation
 
-        for (int i = 0; i < 10; i ++) {
-            Chunk chunk1 = new Chunk();
-            Coordinate chunkCoord = coord.toChunkCoord();
-            if(!chunkMap.containsKey(chunkCoord))
-                chunkMap.put(chunkCoord, chunk1);
+        chunkList.add(new Chunk(0, 0));
+        chunkList.add(new Chunk(0, -1));
+        chunkList.add(new Chunk(-1, 0));
+        chunkList.add(new Chunk(-1, -1));
 
-            Block block = new Block(new Coordinate(i, 0, 0), Material.STONE);
-            Chunk chunk = chunkMap.get(chunkCoord);
-            assert chunk != null;
-            chunk1.addBlock(new Coordinate(i, 0), block);
-        }
+        chunkList.forEach(chunk -> {
+            final int y = 0;
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    chunk.setChunkBlock(Coordinate.get(x, y, z), Blocks.STONE);
+                }
+            }
+        });
     }
 
     public String getName() {
@@ -55,6 +56,19 @@ public class World {
 
     public List<Entity> getEntityList() {
         return entityList;
+    }
+
+    public List<Chunk> getChunkList() {
+        return chunkList;
+    }
+
+    public boolean isChunkLoaded(Coordinate coordinate) {
+        for (Chunk chunk : chunkList) {
+            if (chunk.isInChunk(coordinate)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void leave(Player player) {

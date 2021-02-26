@@ -55,6 +55,7 @@ public enum EnumProtocol {
         this.addPacket(0x32, EnumProtocolDirection.TO_CLIENT, OutPacketDestroyEntities.class);
         this.addPacket(0x36, EnumProtocolDirection.TO_CLIENT, OutPacketEntityHeadLook.class);
         this.addPacket(0x3A, EnumProtocolDirection.TO_CLIENT, OutPacketHeldItemChange.class);
+        this.addPacket(0x4C, EnumProtocolDirection.TO_CLIENT, OutPacketEntityTeleport.class);
     }},
     STATUS(1) {{
         this.addPacket(0x00, EnumProtocolDirection.TO_SERVER, InPacketStatusStart.class);

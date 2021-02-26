@@ -8,7 +8,7 @@ import net.servzero.network.ping.PingResponse;
 
 public class OutPacketStatusResponse implements Packet<PacketHandler> {
     private static final Gson gson = new Gson();
-    private PingResponse response;
+    private final PingResponse response;
 
     public OutPacketStatusResponse(PingResponse response) {
         this.response = response;
