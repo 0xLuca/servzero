@@ -8,9 +8,10 @@ import java.io.IOException;
 import java.util.*;
 
 public class ChunkSection {
+    private static final int BITS_PER_BLOCK = 13;
+
     private int y;
     private short blockCount;
-    private short bitsPerBlock;
     private Map<Coordinate, Block> blockMap = new HashMap<>();
 
     public ChunkSection() {
@@ -21,13 +22,35 @@ public class ChunkSection {
     }
 
     public void write(PacketDataSerializer serializer) {
-        serializer.writeByte(13);
+        serializer.writeByte(BITS_PER_BLOCK);
+//        serializer.writeByte(16);
         serializer.writeVarInt(0);
-        long[] blocks = new long[4096];
-        long stone = (1 << 4) | 0;
-        Arrays.fill(blocks, stone);
-        for (int i = 0; i < blocks.length * 2; i++) {
-            serializer.writeByte(0);
+        long[] data = new long[16 * 16 * 16 * BITS_PER_BLOCK / 64];
+
+        int stone = (1 << 4) | 0;
+
+        for (int y = 0; y < 16; y++) {
+            for (int z = 0; z < 16; z++) {
+                for (int x = 0; x < 16; x++) {
+                    int blockNumber = (((y * 16) + z) * 16) + x;
+                    int startLong = (blockNumber * BITS_PER_BLOCK) / 64;
+                    int startOffset = (blockNumber * BITS_PER_BLOCK) % 64;
+                    int endLong = ((blockNumber + 1) * BITS_PER_BLOCK - 1) / 64;
+
+                    int value = y < 10 ? stone : 0;
+
+                    data[startLong] |= ((long) value << startOffset);
+
+                    if (startLong != endLong) {
+                        data[endLong] = (value >> (64 - startOffset));
+                    }
+                }
+            }
+        }
+
+        serializer.writeLongArray(data);
+        for (int i = 0; i < 4096; i++) {
+            serializer.writeByte(1);
         }
     }
 

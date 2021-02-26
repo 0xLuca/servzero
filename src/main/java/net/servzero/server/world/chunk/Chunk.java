@@ -38,8 +38,11 @@ public class Chunk {
         serializer.writeVarInt(65535); //bitmask
         PacketDataSerializer buffer = new PacketDataSerializer(Unpooled.buffer());
         Arrays.stream(sections).forEach(section -> section.write(buffer));
-        serializer.writeVarInt(buffer.readableBytes()); //length
+        serializer.writeVarInt(buffer.readableBytes() + 256); //length
         Arrays.stream(sections).forEach(section -> section.write(serializer)); //data
+        for (int i = 0; i < 256; i++) {
+            serializer.writeByte(0);
+        }
         serializer.writeVarInt(0); //biome array length
     }
 }
