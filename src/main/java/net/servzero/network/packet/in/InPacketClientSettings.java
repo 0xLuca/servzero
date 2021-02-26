@@ -4,7 +4,7 @@ import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.handler.AbstractInPacketPlayHandler;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
 import net.servzero.server.game.EnumChatMode;
-import net.servzero.server.game.EnumHand;
+import net.servzero.server.game.EnumMainHand;
 import net.servzero.server.player.ClientSettings;
 
 import java.util.Locale;
@@ -15,7 +15,7 @@ public class InPacketClientSettings implements Packet<AbstractInPacketPlayHandle
     private EnumChatMode chatMode;
     private boolean chatColors;
     private short displayedSkinParts;
-    private EnumHand mainHand;
+    private EnumMainHand mainHand;
 
     @Override
     public void read(PacketDataSerializer serializer) {
@@ -24,7 +24,7 @@ public class InPacketClientSettings implements Packet<AbstractInPacketPlayHandle
         this.chatMode = EnumChatMode.getById(serializer.readVarInt());
         this.chatColors = serializer.readBoolean();
         this.displayedSkinParts = serializer.readUnsignedByte();
-        this.mainHand = EnumHand.getById(serializer.readVarInt());
+        this.mainHand = EnumMainHand.getById(serializer.readVarInt());
     }
 
     @Override

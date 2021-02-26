@@ -4,6 +4,8 @@ import net.servzero.network.packet.serialization.PacketDataSerializer;
 import net.servzero.server.world.block.BlockState;
 import net.servzero.server.world.block.Coordinate;
 
+import java.util.Arrays;
+
 public class ChunkSection {
     private static final int BITS_PER_BLOCK = 13;
 
@@ -42,8 +44,22 @@ public class ChunkSection {
 
         serializer.writeLongArray(data);
 
-        for (int i = 0; i < 4096; i++) {
-            serializer.writeByte(1);
+        for (int x = 0; x < 16; x+=2) {
+            for (int y = 0; y < 16; y++) {
+                for (int z = 0; z < 16; z++) {
+                    int light = 15;
+                    serializer.writeByte(light | (light << 4));
+                }
+            }
+        }
+
+        for (int x = 0; x < 16; x+=2) {
+            for (int y = 0; y < 16; y++) {
+                for (int z = 0; z < 16; z++) {
+                    int light = 15;
+                    serializer.writeByte(light | (light << 4));
+                }
+            }
         }
     }
 

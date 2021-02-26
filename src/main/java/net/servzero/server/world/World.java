@@ -98,7 +98,6 @@ public class World {
                 ));
 
                 // Spawn other player to new player
-                Logger.info("Sending " + entityPlayer.getName() + " the player " + player.getName() + " at " + player.getLocation());
                 entityPlayer.networkManager.sendPacket(new OutPacketSpawnPlayer(
                         player.getId(),
                         player.getUniqueId(),

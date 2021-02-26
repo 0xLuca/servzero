@@ -1,7 +1,7 @@
 package net.servzero.server.player;
 
 import net.servzero.server.game.EnumChatMode;
-import net.servzero.server.game.EnumHand;
+import net.servzero.server.game.EnumMainHand;
 
 import java.util.Locale;
 
@@ -11,7 +11,7 @@ public class ClientSettings {
     private EnumChatMode chatMode;
     private boolean chatColors;
     private short displayedSkinParts;
-    private EnumHand mainHand;
+    private EnumMainHand mainHand;
 
     public ClientSettings() {
         this.locale = Locale.getDefault();
@@ -19,10 +19,10 @@ public class ClientSettings {
         this.chatMode = EnumChatMode.ENABLED;
         this.chatColors = true;
         this.displayedSkinParts = 0x7F;
-        this.mainHand = EnumHand.RIGHT;
+        this.mainHand = EnumMainHand.RIGHT;
     }
 
-    public ClientSettings(Locale locale, byte viewDistance, EnumChatMode chatMode, boolean chatColors, short displayedSkinParts, EnumHand mainHand) {
+    public ClientSettings(Locale locale, byte viewDistance, EnumChatMode chatMode, boolean chatColors, short displayedSkinParts, EnumMainHand mainHand) {
         this.locale = locale;
         this.viewDistance = viewDistance;
         this.chatMode = chatMode;
@@ -71,11 +71,11 @@ public class ClientSettings {
         this.displayedSkinParts = displayedSkinParts;
     }
 
-    public EnumHand getMainHand() {
+    public EnumMainHand getMainHand() {
         return mainHand;
     }
 
-    public void setMainHand(EnumHand mainHand) {
+    public void setMainHand(EnumMainHand mainHand) {
         this.mainHand = mainHand;
     }
 }

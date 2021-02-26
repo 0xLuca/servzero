@@ -1,17 +1,17 @@
 package net.servzero.server.game;
 
-public enum EnumHand {
-    RIGHT(9),
-    LEFT(1)
+public enum EnumMainHand {
+    LEFT(0),
+    RIGHT(1)
     ;
 
     private final int id;
 
-    EnumHand(int id) {
+    EnumMainHand(int id) {
         this.id = id;
     }
 
-    public static EnumHand getById(int id) {
+    public static EnumMainHand getById(int id) {
         return values()[id];
     }
 
