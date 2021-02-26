@@ -1,15 +1,11 @@
 package net.servzero.server.world.chunk;
 
+import net.servzero.network.packet.serialization.PacketDataSerializer;
 import net.servzero.server.world.block.Block;
 import net.servzero.server.world.block.Coordinate;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ChunkSection {
     private int y;
@@ -24,25 +20,19 @@ public class ChunkSection {
         return blockMap.size();
     }
 
-    public byte[] toByteArray() throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(bos);
-        List<Byte> returnByteList = new ArrayList<>();
-
-        dos.writeShort(getBlockCount());
-        dos.writeByte(14);
-
-        dos.writeInt(1);
-        dos.writeLong(1111111);
-        dos.flush();
-
-
-        return  bos.toByteArray();
+    public void write(PacketDataSerializer serializer) {
+        serializer.writeByte(13);
+        serializer.writeVarInt(0);
+        long[] blocks = new long[4096];
+        long stone = (1 << 4) | 0;
+        Arrays.fill(blocks, stone);
+        for (int i = 0; i < blocks.length * 2; i++) {
+            serializer.writeByte(0);
+        }
     }
 
-    public int addBlock(Coordinate coord, Block block) {
+    public void addBlock(Coordinate coord, Block block) {
         blockMap.put(coord, block);
-        return 0;
     }
 
     public int getY() {

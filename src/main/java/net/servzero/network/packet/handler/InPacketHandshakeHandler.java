@@ -13,6 +13,7 @@ public class InPacketHandshakeHandler extends AbstractInPacketHandshakeHandler {
 
     @Override
     public void handle(InPacketHandshakeSetProtocol packet) {
+        this.networkManager.setProtocolVersion(packet.getVersion());
         switch (packet.getProtocol()) {
             case LOGIN:
                 this.networkManager.setProtocol(EnumProtocol.LOGIN);
@@ -22,7 +23,6 @@ public class InPacketHandshakeHandler extends AbstractInPacketHandshakeHandler {
             case STATUS:
                 this.networkManager.setProtocol(EnumProtocol.STATUS);
                 InPacketStatusHandler handler = new InPacketStatusHandler(this.networkManager);
-                handler.setClientVersion(packet.getVersion());
                 this.networkManager.setPacketHandler(handler);
                 break;
             default:

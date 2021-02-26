@@ -1,7 +1,11 @@
 package net.servzero.server.world.chunk;
 
+import io.netty.buffer.Unpooled;
+import net.servzero.network.packet.serialization.PacketDataSerializer;
 import net.servzero.server.world.block.Block;
 import net.servzero.server.world.block.Coordinate;
+
+import java.util.Arrays;
 
 public class Chunk {
     private int x;
@@ -25,5 +29,17 @@ public class Chunk {
         ChunkSection section = sections[chunkSelectionNum];
         section.addBlock(coord, block);
         return 0;
+    }
+
+    public void write(PacketDataSerializer serializer) {
+        serializer.writeInt(0); //chunkX
+        serializer.writeInt(0); //chunkY
+        serializer.writeBoolean(true); //groundupcontinous (new chunk drop all)
+        serializer.writeVarInt(65535); //bitmask
+        PacketDataSerializer buffer = new PacketDataSerializer(Unpooled.buffer());
+        Arrays.stream(sections).forEach(section -> section.write(buffer));
+        serializer.writeVarInt(buffer.readableBytes()); //length
+        Arrays.stream(sections).forEach(section -> section.write(serializer)); //data
+        serializer.writeVarInt(0); //biome array length
     }
 }

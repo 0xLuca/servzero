@@ -25,6 +25,8 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<PacketHan
     private EnumProtocolDirection protocolDirection;
     private EnumProtocol protocol;
 
+    private int protocolVersion;
+
     public NetworkManager(EnumProtocolDirection protocolDirection) {
         this.protocolDirection = protocolDirection;
     }
@@ -86,6 +88,14 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<PacketHan
                 this.channel.eventLoop().execute(toExecute);
             }
         }
+    }
+
+    public int getProtocolVersion() {
+        return protocolVersion;
+    }
+
+    public void setProtocolVersion(int protocolVersion) {
+        this.protocolVersion = protocolVersion;
     }
 
     public void close() {

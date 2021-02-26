@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class InPacketStatusHandler extends AbstractInPacketStatusHandler {
-    private int clientVersion = -1;
-
     public InPacketStatusHandler(NetworkManager networkManager) {
         super(networkManager);
     }
@@ -21,7 +19,7 @@ public class InPacketStatusHandler extends AbstractInPacketStatusHandler {
     @Override
     public void handle(InPacketStatusStart packet) {
         PingResponse response = new PingResponse(
-                new PingResponse.VersionInfo("1.0.0", 340),
+                new PingResponse.VersionInfo("1.0.0", this.networkManager.getProtocolVersion()),
                 new PingResponse.PlayerInfo(100, 47, new ArrayList<>() {{
                     add(new PingResponse.PlayerInfoItem("Name1", UUID.randomUUID()));
                     add(new PingResponse.PlayerInfoItem("Name2", UUID.randomUUID()));
@@ -42,9 +40,5 @@ public class InPacketStatusHandler extends AbstractInPacketStatusHandler {
     @Override
     public void handle(Packet<?> packet) {
 
-    }
-
-    public void setClientVersion(int clientVersion) {
-        this.clientVersion = clientVersion;
     }
 }

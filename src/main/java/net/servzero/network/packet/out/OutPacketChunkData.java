@@ -6,6 +6,7 @@ import net.servzero.network.packet.serialization.PacketDataSerializer;
 import net.servzero.server.world.block.Block;
 import net.servzero.server.world.block.Coordinate;
 import net.servzero.server.world.block.Material;
+import net.servzero.server.world.chunk.Chunk;
 import net.servzero.server.world.chunk.ChunkSection;
 
 import java.io.IOException;
@@ -36,7 +37,6 @@ public class OutPacketChunkData implements Packet<PacketHandler> {
         for (int i = 0; i < split.length; i++) {
             this.data[i] = Byte.parseByte(split[i]);
         }
-        System.out.println("DATA LOADED!");
     }
 
     @Override
@@ -74,14 +74,10 @@ public class OutPacketChunkData implements Packet<PacketHandler> {
         return;
 */
 
-        serializer.writeInt(0);
-
-        serializer.writeInt(0);
-        serializer.writeBoolean(true);
-        serializer.writeVarInt(63);
-        serializer.writeVarInt(data.length);
-        serializer.writeBytes(data);
-        serializer.writeVarInt(0);
+        Chunk c = new Chunk();
+        c.write(serializer);
+        /*serializer.writeVarInt(data.length);
+        serializer.writeBytes(data);*/
 
     }
 
