@@ -8,7 +8,7 @@ import java.util.UUID;
 public class Player extends Entity {
     private final GameProfile profile;
     private ClientSettings settings = new ClientSettings();
-    public final NetworkManager networkManager;
+    private final NetworkManager networkManager;
 
     public Player(GameProfile profile, NetworkManager networkManager) {
         super();
@@ -16,12 +16,16 @@ public class Player extends Entity {
         this.networkManager = networkManager;
     }
 
+    public NetworkManager getNetworkManager() {
+        return this.networkManager;
+    }
+
     public GameProfile getProfile() {
-        return profile;
+        return this.profile;
     }
 
     public ClientSettings getSettings() {
-        return settings;
+        return this.settings;
     }
 
     public void setSettings(ClientSettings settings) {

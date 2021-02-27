@@ -14,7 +14,7 @@ public class KeepAliveTicker implements Runnable {
     public void run() {
         while (true) {
             server.getPlayerList().forEach(player -> {
-                player.networkManager.sendPacket(new OutPacketKeepAlive());
+                player.getNetworkManager().sendPacket(new OutPacketKeepAlive());
             });
             try {
                 Thread.sleep(5000L);

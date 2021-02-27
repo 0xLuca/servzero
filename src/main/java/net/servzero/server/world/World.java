@@ -75,7 +75,7 @@ public class World {
         this.entityList.remove(player);
 
         Server.getInstance().getPlayerList().forEach(onlinePlayer -> {
-            onlinePlayer.networkManager.sendPacket(new OutPacketDestroyEntities(player.getId()));
+            onlinePlayer.getNetworkManager().sendPacket(new OutPacketDestroyEntities(player.getId()));
         });
     }
 
@@ -87,7 +87,7 @@ public class World {
             final Player entityPlayer = (Player) entity;
             Server.getInstance().getPlayerList().stream().filter(player -> player.getLocation().getWorld().equals(this) && !entity.equals(player)).forEach(player -> {
                 // Spawn new player to other player
-                player.networkManager.sendPacket(new OutPacketSpawnPlayer(
+                player.getNetworkManager().sendPacket(new OutPacketSpawnPlayer(
                         entity.getId(),
                         entityPlayer.getUniqueId(),
                         location.getX(),
@@ -98,7 +98,7 @@ public class World {
                 ));
 
                 // Spawn other player to new player
-                entityPlayer.networkManager.sendPacket(new OutPacketSpawnPlayer(
+                entityPlayer.getNetworkManager().sendPacket(new OutPacketSpawnPlayer(
                         player.getId(),
                         player.getUniqueId(),
                         player.getLocation().getX(),

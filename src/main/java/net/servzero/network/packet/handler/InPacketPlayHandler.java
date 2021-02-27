@@ -18,7 +18,7 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
     private final Player player;
 
     public InPacketPlayHandler(Player player) {
-        super(player.networkManager);
+        super(player.getNetworkManager());
         this.player = player;
     }
 
@@ -87,7 +87,7 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
         }
 
         Server.getInstance().getPlayerList().stream().filter(onlinePlayer -> !onlinePlayer.equals(this.player)).forEach(onlinePlayer -> {
-            onlinePlayer.networkManager.sendPacket(new OutPacketAnimation(this.player.getId(), action));
+            onlinePlayer.getNetworkManager().sendPacket(new OutPacketAnimation(this.player.getId(), action));
         });
     }
 
@@ -100,7 +100,7 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
     public void handleChatMessage(InPacketChatMessage packet) {
         Logger.info("[Chat] " + this.player.getName()  + ": " + packet.getMessage());
         Server.getInstance().getPlayerList().forEach(player ->
-                player.networkManager.sendPacket(new OutPacketChatMessage(
+                player.getNetworkManager().sendPacket(new OutPacketChatMessage(
                         this.player.getName() + ": " + packet.getMessage().replace("&", "§"),
                         EnumChatType.CHAT
                 )));

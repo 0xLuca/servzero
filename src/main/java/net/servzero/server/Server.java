@@ -91,7 +91,7 @@ public class Server implements Runnable {
 
     public void registerPlayer(Player player) {
         this.playerList.add(player);
-        player.networkManager.setOwner(player);
+        player.getNetworkManager().setOwner(player);
         Logger.info("Player " + player.getName() + " joined.");
     }
 

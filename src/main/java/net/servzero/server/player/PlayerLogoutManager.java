@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class PlayerLogoutManager {
     public static void handleLogout(Player player) {
-        Server.getInstance().getPlayerList().forEach(onlinePlayer -> onlinePlayer.networkManager.sendPacket(new OutPacketPlayerListItem(
+        Server.getInstance().getPlayerList().forEach(onlinePlayer -> onlinePlayer.getNetworkManager().sendPacket(new OutPacketPlayerListItem(
                 EnumPlayerListAction.REMOVE_PLAYER,
                 1,
                 new ArrayList<>() {{

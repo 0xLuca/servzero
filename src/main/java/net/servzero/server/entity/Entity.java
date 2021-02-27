@@ -100,7 +100,7 @@ public class Entity {
     }
 
     private void sendPlayerSpawn(Player toSend, Player toSpawn) {
-        toSend.networkManager.sendPacket(new OutPacketSpawnPlayer(
+        toSend.getNetworkManager().sendPacket(new OutPacketSpawnPlayer(
                 toSpawn.getId(),
                 toSpawn.getUniqueId(),
                 toSpawn.getLocation().getX(),
@@ -109,14 +109,14 @@ public class Entity {
                 toSpawn.getLocation().getYaw(),
                 toSpawn.getLocation().getPitch()
         ));
-        toSend.networkManager.sendPacket(new OutPacketEntityHeadLook(
+        toSend.getNetworkManager().sendPacket(new OutPacketEntityHeadLook(
                 toSpawn.getId(),
                 toSpawn.getLocation().getYaw()
         ));
     }
 
     private void sendDespawn(Player toSend, Entity toDespawn) {
-        toSend.networkManager.sendPacket(new OutPacketDestroyEntities(toDespawn.getId()));
+        toSend.getNetworkManager().sendPacket(new OutPacketDestroyEntities(toDespawn.getId()));
     }
 
     private boolean hasPositionChanged(double newX, double newY, double newZ) {
@@ -270,15 +270,15 @@ public class Entity {
     }
 
     private void sendToAll(Packet<?> packet) {
-        Server.getInstance().getPlayerList().forEach(player -> player.networkManager.sendPacket(packet));
+        Server.getInstance().getPlayerList().forEach(player -> player.getNetworkManager().sendPacket(packet));
     }
 
     private void sendToAllInRange(Packet<?> packet) {
-        Server.getInstance().getPlayerList().stream().filter(this::isInRenderDistanceOf).forEach(player -> player.networkManager.sendPacket(packet));
+        Server.getInstance().getPlayerList().stream().filter(this::isInRenderDistanceOf).forEach(player -> player.getNetworkManager().sendPacket(packet));
     }
 
     private void sendToAllInRangeExceptThis(Packet<?> packet) {
         Player thisPlayer = (this instanceof Player) ? (Player) this : null;
-        Server.getInstance().getPlayerListExcept(thisPlayer).stream().filter(this::isInRenderDistanceOf).forEach(player -> player.networkManager.sendPacket(packet));
+        Server.getInstance().getPlayerListExcept(thisPlayer).stream().filter(this::isInRenderDistanceOf).forEach(player -> player.getNetworkManager().sendPacket(packet));
     }
 }

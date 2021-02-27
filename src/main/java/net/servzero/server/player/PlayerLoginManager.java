@@ -12,15 +12,19 @@ import java.util.List;
 
 public class PlayerLoginManager {
     public static void login(Player player) {
+        // Create Profile and Spawn Location to Spawn the player at
         GameProfile profile = player.getProfile();
         Location spawnLocation = new Location(Server.getInstance().getWorld(), 0, 1, 0, 0, 0);
+
+        // Register the player (add to list and set networkmanager's owner)
         Server.getInstance().registerPlayer(player);
 
         //TODO: Send real information
 
-        player.networkManager.sendPacket(new OutPacketLoginSuccess(profile.getUuid(), profile.getName()));
-        player.networkManager.setPacketHandler(new InPacketPlayHandler(player));
-        player.networkManager.sendPacket(new OutPacketJoinGame(
+        //
+        player.getNetworkManager().sendPacket(new OutPacketLoginSuccess(profile.getUuid(), profile.getName()));
+        player.getNetworkManager().setPacketHandler(new InPacketPlayHandler(player));
+        player.getNetworkManager().sendPacket(new OutPacketJoinGame(
                 0,
                 EnumGameMode.SURVIVAL,
                 EnumDimension.OVERWORLD,
@@ -29,12 +33,12 @@ public class PlayerLoginManager {
                 EnumLevelType.FLAT,
                 false
         ));
-        player.networkManager.sendPacket(new OutPacketHeldItemChange(1));
-        player.networkManager.sendPacket(new OutPacketDifficulty(EnumDifficulty.PEACEFUL));
+        player.getNetworkManager().sendPacket(new OutPacketHeldItemChange(1));
+        player.getNetworkManager().sendPacket(new OutPacketDifficulty(EnumDifficulty.PEACEFUL));
 
-        Server.getInstance().getWorld().getChunkList().forEach(chunk -> player.networkManager.sendPacket(new OutPacketChunkData(chunk)));
+        Server.getInstance().getWorld().getChunkList().forEach(chunk -> player.getNetworkManager().sendPacket(new OutPacketChunkData(chunk)));
 
-        player.networkManager.sendPacket(new OutPacketPlayerPositionLook(
+        player.getNetworkManager().sendPacket(new OutPacketPlayerPositionLook(
                 spawnLocation.getX(),
                 spawnLocation.getY(),
                 spawnLocation.getZ(),
@@ -43,7 +47,7 @@ public class PlayerLoginManager {
                 (byte) 0));
 
         List<Player> onlinePlayerList = Server.getInstance().getPlayerList();
-        player.networkManager.sendPacket(new OutPacketPlayerListItem(
+        player.getNetworkManager().sendPacket(new OutPacketPlayerListItem(
                 EnumPlayerListAction.ADD_PLAYER,
                 onlinePlayerList.size(),
                 new ArrayList<>() {{
@@ -57,7 +61,7 @@ public class PlayerLoginManager {
                 }}
         ));
         onlinePlayerList.stream().filter(onlinePlayer -> !onlinePlayer.equals(player)).forEach(onlinePlayer -> {
-            onlinePlayer.networkManager.sendPacket(new OutPacketPlayerListItem(
+            onlinePlayer.getNetworkManager().sendPacket(new OutPacketPlayerListItem(
                     EnumPlayerListAction.ADD_PLAYER,
                     1,
                     new ArrayList<>() {{
@@ -71,7 +75,7 @@ public class PlayerLoginManager {
                     }}
             ));
         });
-        player.networkManager.sendPacket(new OutPacketPlayerAbilities(true, false, true, false, 0.1F, 0.0F));
+        player.getNetworkManager().sendPacket(new OutPacketPlayerAbilities(true, false, true, false, 0.1F, 0.0F));
 
         Server.getInstance().getWorld().spawn(player, spawnLocation);
     }
