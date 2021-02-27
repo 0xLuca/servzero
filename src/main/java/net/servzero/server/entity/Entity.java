@@ -37,6 +37,18 @@ public class Entity {
         return true;
     }
 
+    private double distanceToSquared(Player player) {
+        return this.location.distanceToSquared(player.getLocation());
+    }
+
+    private double distanceTo(Player player) {
+        return this.location.distanceTo(player.getLocation());
+    }
+
+    public boolean isInViewDistance(Player player) {
+        return distanceTo(player) <= player.getSettings().getViewDistance();
+    }
+
     public void setInitialLocation(Location location) {
         if (this.location == null) {
             this.location = location;
@@ -92,6 +104,10 @@ public class Entity {
     private void sendPositionAndRotation() {
         OutPacketEntityRelativeMoveLook packet;
         final DeltaPosition delta = calculateDelta();
+        if (shouldTeleport(delta)) {
+            sendTeleport();
+            return;
+        }
         packet = new OutPacketEntityRelativeMoveLook(
                 this.id,
                 delta.getDeltaX(),
@@ -101,13 +117,17 @@ public class Entity {
                 this.location.getPitch(),
                 this.isOnGround()
         );
-        sendToAllExceptThis(packet);
+        sendToAllInRangeExceptThis(packet);
         sendHeadLook();
     }
 
     private void sendPosition() {
         OutPacketEntityRelativeMove packet;
         final DeltaPosition delta = calculateDelta();
+        if (shouldTeleport(delta)) {
+            sendTeleport();
+            return;
+        }
         packet = new OutPacketEntityRelativeMove(
                 this.id,
                 delta.getDeltaX(),
@@ -115,7 +135,7 @@ public class Entity {
                 delta.getDeltaZ(),
                 this.isOnGround()
         );
-        sendToAllExceptThis(packet);
+        sendToAllInRangeExceptThis(packet);
     }
 
     private void sendRotation() {
@@ -125,7 +145,7 @@ public class Entity {
                 this.location.getPitch(),
                 this.isOnGround()
         );
-        sendToAllExceptThis(packet);
+        sendToAllInRangeExceptThis(packet);
         sendHeadLook();
     }
 
@@ -134,7 +154,24 @@ public class Entity {
                 this.id,
                 this.location.getYaw()
         );
-        sendToAllExceptThis(packet);
+        sendToAllInRangeExceptThis(packet);
+    }
+
+    private boolean shouldTeleport(DeltaPosition position) {
+        return position.isOverflow();
+    }
+
+    private void sendTeleport() {
+        OutPacketEntityTeleport packet = new OutPacketEntityTeleport(
+                this.id,
+                this.location.getX(),
+                this.location.getY(),
+                this.location.getZ(),
+                this.location.getYaw(),
+                this.location.getPitch(),
+                this.isOnGround()
+        );
+        sendToAllInRange(packet);
     }
 
     private DeltaPosition calculateDelta() {
@@ -154,7 +191,11 @@ public class Entity {
         return (short) ((current * 32 - prev * 32) * 128);
     }
 
-    private void sendToAllExceptThis(Packet<?> packet) {
+    private void sendToAllInRange(Packet<?> packet) {
+        Server.getInstance().getPlayerList().forEach(player -> player.networkManager.sendPacket(packet));
+    }
+
+    private void sendToAllInRangeExceptThis(Packet<?> packet) {
         Player thisPlayer = (this instanceof Player) ? (Player) this : null;
         Server.getInstance().getPlayerListExcept(thisPlayer).forEach(player -> player.networkManager.sendPacket(packet));
     }

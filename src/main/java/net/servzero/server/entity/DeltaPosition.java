@@ -1,25 +1,30 @@
 package net.servzero.server.entity;
 
 public class DeltaPosition {
-    private final short deltaX;
-    private final short deltaY;
-    private final short deltaZ;
+    private final int deltaX;
+    private final int deltaY;
+    private final int deltaZ;
 
-    public DeltaPosition(short deltaX, short deltaY, short deltaZ) {
+    public DeltaPosition(int deltaX, int deltaY, int deltaZ) {
         this.deltaX = deltaX;
         this.deltaY = deltaY;
         this.deltaZ = deltaZ;
     }
 
+    public boolean isOverflow() {
+        short max = Short.MAX_VALUE;
+        return max < deltaX || max < deltaY || max < deltaZ;
+    }
+
     public short getDeltaX() {
-        return deltaX;
+        return (short) deltaX;
     }
 
     public short getDeltaY() {
-        return deltaY;
+        return (short) deltaY;
     }
 
     public short getDeltaZ() {
-        return deltaZ;
+        return (short) deltaZ;
     }
 }

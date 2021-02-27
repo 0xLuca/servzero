@@ -26,8 +26,6 @@ public class InPacketLoginHandler extends AbstractInPacketLoginHandler {
 
         //TODO: Add encryption and compression
 
-        Server.getInstance().registerPlayer(player);
-
         PlayerLoginManager.login(player);
     }
 

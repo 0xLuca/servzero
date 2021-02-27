@@ -1,11 +1,7 @@
 package net.servzero.server.player;
 
-import net.servzero.helper.RandomHelper;
 import net.servzero.network.packet.handler.InPacketPlayHandler;
 import net.servzero.network.packet.out.*;
-import net.servzero.network.packet.out.entity.OutPacketEntityHeadLook;
-import net.servzero.network.packet.out.entity.OutPacketEntityLook;
-import net.servzero.network.packet.out.entity.OutPacketEntityRelativeMoveLook;
 import net.servzero.network.packet.out.player.OutPacketPlayerPositionLook;
 import net.servzero.server.Server;
 import net.servzero.server.game.*;
@@ -13,12 +9,13 @@ import net.servzero.server.world.Location;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class PlayerLoginManager {
     public static void login(Player player) {
         GameProfile profile = player.getProfile();
         Location spawnLocation = new Location(Server.getInstance().getWorld(), 0, 1, 0, 0, 0);
+        Server.getInstance().registerPlayer(player);
+        Server.getInstance().getWorld().spawn(player, spawnLocation);
 
         //TODO: Send real information
 
@@ -75,7 +72,5 @@ public class PlayerLoginManager {
             ));
         });
         player.networkManager.sendPacket(new OutPacketPlayerAbilities(true, false, true, false, 0.1F, 0.0F));
-
-        Server.getInstance().getWorld().spawn(player, spawnLocation);
     }
 }

@@ -1,5 +1,7 @@
 package net.servzero.server.world;
 
+import net.servzero.helper.MathHelper;
+
 public class Location {
     private final World world;
     private volatile double x;
@@ -66,6 +68,22 @@ public class Location {
 
     public synchronized void setPitch(float pitch) {
         this.pitch = pitch;
+    }
+
+    public double distanceTo(Location other) {
+        return Math.sqrt(distanceToSquared(other));
+    }
+
+    public double distanceToSquared(Location other) {
+        if (other == null) {
+            throw new IllegalArgumentException("Cannot measure distance to a null location");
+        } else if (other.getWorld() == null || this.world == null) {
+            throw new IllegalArgumentException("Cannot measure distance when world is null");
+        } else if (!other.getWorld().equals(this.world)) {
+            throw  new IllegalArgumentException("Cannot measure distance between different worlds");
+        }
+
+        return MathHelper.square(this.x - other.x) + MathHelper.square(this.y - other.y) + MathHelper.square(this.z - other.z);
     }
 
     @Override
