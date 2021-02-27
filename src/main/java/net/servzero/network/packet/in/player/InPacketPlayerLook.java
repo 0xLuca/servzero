@@ -1,8 +1,6 @@
 package net.servzero.network.packet.in.player;
 
-import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.handler.AbstractInPacketPlayHandler;
-import net.servzero.network.packet.handler.InPacketPlayHandler;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
 
 import java.io.IOException;

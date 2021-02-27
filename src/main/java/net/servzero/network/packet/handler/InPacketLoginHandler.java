@@ -24,7 +24,7 @@ public class InPacketLoginHandler extends AbstractInPacketLoginHandler {
         GameProfile profile = new GameProfile(UUID.randomUUID(), packet.getUsername());
         Player player = new Player(profile, this.networkManager);
 
-        //TODO: Add encryption and compression
+        // TODO: Add encryption and compression
 
         PlayerLoginManager.login(player);
     }

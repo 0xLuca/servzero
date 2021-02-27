@@ -36,10 +36,10 @@ public class OutPacketPlayerListItem implements Packet<PacketHandler> {
             switch (action) {
                 case ADD_PLAYER:
                     serializer.writeString(playerListItem.getProfile().getName());
-                    serializer.writeVarInt(0); //TODO: Add properties
+                    serializer.writeVarInt(0); // TODO: Add properties
                     serializer.writeEnum(playerListItem.getGameMode());
                     serializer.writeVarInt(playerListItem.getPing());
-                    serializer.writeBoolean(false); //TODO: Add display names
+                    serializer.writeBoolean(false); // TODO: Add display names
                     break;
                 case UPDATE_GAMEMODE:
                     serializer.writeEnum(playerListItem.getGameMode());
@@ -48,7 +48,7 @@ public class OutPacketPlayerListItem implements Packet<PacketHandler> {
                     serializer.writeVarInt(playerListItem.getPing());
                     break;
                 case UPDATE_DISPLAY_NAME:
-                    serializer.writeBoolean(false); //TODO: Add display names
+                    serializer.writeBoolean(false); // TODO: Add display names
                     break;
                 case REMOVE_PLAYER:
                 default:

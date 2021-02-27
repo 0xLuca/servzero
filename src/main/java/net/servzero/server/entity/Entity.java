@@ -7,8 +7,9 @@ import net.servzero.network.packet.out.player.OutPacketSpawnPlayer;
 import net.servzero.server.Server;
 import net.servzero.server.player.Player;
 import net.servzero.server.world.Location;
+import net.servzero.server.world.World;
 
-//TODO: Add world changes
+// TODO: Add world changes
 public class Entity {
     private static volatile int entityIdCounter = 0;
 
@@ -36,6 +37,10 @@ public class Entity {
 
     public Location getLocation() {
         return location;
+    }
+
+    public World getWorld() {
+        return location.getWorld();
     }
 
     public boolean isOnGround() {
@@ -87,7 +92,7 @@ public class Entity {
                     sendPlayerSpawn(thisPlayer, otherPlayer);
                     sendPlayerSpawn(otherPlayer, thisPlayer);
                 } else {
-                    //TODO: Add entity spawning and sending
+                    // TODO: Add entity spawning and sending
                 }
             } else if (otherEntity.isNewNotInRenderDistanceOf(this) || this.isNewNotInRenderDistanceOf(otherEntity)) {
                 sendDespawn(thisPlayer, otherEntity);

@@ -1,6 +1,8 @@
 package net.servzero.server.player;
 
+import net.servzero.chat.EnumChatType;
 import net.servzero.network.NetworkManager;
+import net.servzero.network.packet.out.OutPacketChatMessage;
 import net.servzero.server.entity.Entity;
 
 import java.util.UUID;
@@ -38,5 +40,9 @@ public class Player extends Entity {
 
     public UUID getUniqueId() {
         return this.profile.getUuid();
+    }
+
+    public void sendMessage(String message) {
+        this.networkManager.sendPacket(new OutPacketChatMessage(message, EnumChatType.SYSTEM));
     }
 }

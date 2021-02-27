@@ -13,6 +13,9 @@ import net.servzero.network.packet.out.OutPacketChatMessage;
 import net.servzero.server.Server;
 import net.servzero.server.game.EnumAnimationAction;
 import net.servzero.server.player.Player;
+import net.servzero.server.world.block.BlockState;
+import net.servzero.server.world.block.Blocks;
+import net.servzero.server.world.block.Position;
 
 public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
     private final Player player;
@@ -86,6 +89,8 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
                 action = -1;
         }
 
+        this.player.getWorld().getBlockAt(this.player.getLocation().asPosition()).setType(Blocks.STONE);
+
         Server.getInstance().getPlayerList().stream().filter(onlinePlayer -> !onlinePlayer.equals(this.player)).forEach(onlinePlayer -> {
             onlinePlayer.getNetworkManager().sendPacket(new OutPacketAnimation(this.player.getId(), action));
         });
@@ -98,6 +103,15 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
 
     @Override
     public void handleChatMessage(InPacketChatMessage packet) {
+        String message = packet.getMessage();
+        if (message.startsWith("/")) {
+            String command = message.substring(1);
+            if (command.startsWith("block")) {
+                this.player.getWorld().getBlockAt(Position.get(0, 1, 0)).setType(Blocks.STONE);
+                this.player.sendMessage(this.player.getWorld().getChunkAt(this.player.getLocation().asPosition()).getX() + "" + this.player.getWorld().getChunkAt(this.player.getLocation().asPosition()).getZ());
+            }
+            return;
+        }
         Logger.info("[Chat] " + this.player.getName()  + ": " + packet.getMessage());
         Server.getInstance().getPlayerList().forEach(player ->
                 player.getNetworkManager().sendPacket(new OutPacketChatMessage(

@@ -1,6 +1,7 @@
 package net.servzero.server.world;
 
 import net.servzero.helper.MathHelper;
+import net.servzero.server.world.block.Position;
 
 public class Location {
     private final World world;
@@ -10,20 +11,26 @@ public class Location {
     private volatile float yaw;
     private volatile float pitch;
 
-    public Location(World world, double x, double y, double z) {
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    public Location(World world, double x, double y, double z, float yaw, float pitch) {
+    private Location(World world, double x, double y, double z, float yaw, float pitch) {
         this.world = world;
         this.x = x;
         this.y = y;
         this.z = z;
         this.yaw = yaw;
         this.pitch = pitch;
+    }
+
+    public static Location fromCoordinate(World world, Position position) {
+        System.out.println("getting location from " + Thread.currentThread().getStackTrace()[2].getClassName());
+        return get(world, position.getX(), position.getY(), position.getZ(), 0, 0);
+    }
+
+    public static Location get(World world, double x, double y, double z, float yaw, float pitch) {
+        return new Location(world, x, y, z, yaw, pitch);
+    }
+
+    public Position asPosition() {
+        return Position.get(this.x, this.y, this.z);
     }
 
     public World getWorld() {

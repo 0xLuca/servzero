@@ -39,6 +39,7 @@ public enum EnumProtocol {
         this.addPacket(0x1D, EnumProtocolDirection.TO_SERVER, InPacketAnimation.class);
         this.addPacket(0x05, EnumProtocolDirection.TO_CLIENT, OutPacketSpawnPlayer.class);
         this.addPacket(0x06, EnumProtocolDirection.TO_CLIENT, OutPacketAnimation.class);
+        this.addPacket(0x0B, EnumProtocolDirection.TO_CLIENT, OutPacketBlockChange.class);
         this.addPacket(0x0D, EnumProtocolDirection.TO_CLIENT, OutPacketDifficulty.class);
         this.addPacket(0x0F, EnumProtocolDirection.TO_CLIENT, OutPacketChatMessage.class);
         this.addPacket(0x1A, EnumProtocolDirection.TO_CLIENT, OutPacketDisconnect.class);

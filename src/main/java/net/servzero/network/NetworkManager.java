@@ -59,7 +59,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<PacketHan
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
         if (this.owner != null) {
-            //TODO: Add leave
+            // TODO: Add leave
             Server.getInstance().unregisterPlayer(owner);
             PlayerLogoutManager.handleLogout(owner);
         }

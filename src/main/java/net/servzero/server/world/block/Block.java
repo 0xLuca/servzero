@@ -1,29 +1,40 @@
 package net.servzero.server.world.block;
 
-import net.servzero.server.world.chunk.ChunkSection;
+import net.servzero.network.packet.out.OutPacketBlockChange;
+import net.servzero.server.world.IUpdateable;
+import net.servzero.server.world.Location;
+import net.servzero.server.world.World;
 
-public class Block {
-    private  ChunkSection section;
-    private final Coordinate location;
-    private final BlockState state;
+public class Block implements IUpdateable {
+    private final World world;
+    private final Position position;
+    private BlockState state;
 
-    public Block(Coordinate location, Material material) {
-        //this.section = section;
-        this.location = location;
-        this.state = new BlockState(material.getId(), 0);
+    public Block(World world, Position position, BlockState material) {
+        this.world = world;
+        this.position = position;
+        this.state = material;
     }
 
-    public ChunkSection getSection() {
-        return section;
+    public World getWorld() {
+        return world;
     }
 
-    public void setSection(ChunkSection section) { this.section = section;}
-
-    public Coordinate getLocation() {
-        return location;
+    public Position getPosition() {
+        return position;
     }
 
     public BlockState getState() {
         return state;
+    }
+
+    public synchronized void setType(BlockState state) {
+        this.state = state;
+        update();
+    }
+
+    @Override
+    public void update() {
+        this.world.sendToAllInWorld(new OutPacketBlockChange(this));
     }
 }

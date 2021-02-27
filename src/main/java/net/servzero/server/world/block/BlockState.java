@@ -1,8 +1,6 @@
 package net.servzero.server.world.block;
 
 public class BlockState {
-    public static BlockState EMPTY = new BlockState(0, 0);
-
     private int id;
     private int data;
 

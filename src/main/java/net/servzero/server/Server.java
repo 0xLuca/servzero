@@ -17,11 +17,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Server implements Runnable {
-    private static Server INSTANCE = null;
+    private static volatile Server INSTANCE = null;
 
     public static final List<Integer> IGNORED_PACKETS = new ArrayList<>() {{
         add(0x4D); // Advancements
         add(0x07); // Window click
+        add(0x15); // Entity Action
+        add(0x14); // Player dig
     }};
 
     public final Thread mainThread;
@@ -32,11 +34,13 @@ public class Server implements Runnable {
     private final World primaryWorld;
 
     private Server() {
+        Logger.info("Loading Server...");
         this.connector = new Connector();
         this.primaryWorld = new World("main world", EnumDimension.OVERWORLD);
 
         this.mainThread = new Thread(this, "Server thread");
         registerWorkers();
+        Logger.info("Server loaded.");
     }
 
     private void registerWorkers() {
@@ -44,13 +48,17 @@ public class Server implements Runnable {
         this.keepAliveThread.start();
     }
 
-    public static Server getInstance() {
+    public static synchronized Server getInstance() {
         return INSTANCE == null ? (INSTANCE = new Server()) : INSTANCE;
     }
 
     public boolean start() {
         Logger.info("Starting Server...");
 
+        // Load worlds
+        this.primaryWorld.load();
+
+        // Initialize connection listener
         try {
             connector.initialize(null, 25565);
         } catch (IOException exception) {
@@ -68,7 +76,7 @@ public class Server implements Runnable {
     public void run() {
         if (this.start()) {
             while (this.running) {
-                //TODO: Run server tick
+                // TODO: Run server tick
                 try {
                     Thread.sleep(100L);
                 } catch (InterruptedException exception) {
