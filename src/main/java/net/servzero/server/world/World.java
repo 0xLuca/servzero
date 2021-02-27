@@ -97,6 +97,10 @@ public class World {
         return new ArrayList<>(chunkMap.values());
     }
 
+    public Chunk getSpawnChunk(Location location) {
+        return getChunkAt(location.asPosition());
+    }
+
     public List<Player> getPlayerList() {
         return Server.getInstance().getPlayerList().stream().filter(player -> player.getWorld().equals(this)).collect(Collectors.toList());
     }

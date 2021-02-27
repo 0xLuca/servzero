@@ -42,7 +42,7 @@ public class PlayerLoginManager {
 
         // Send the player the world's chunks
         // TODO: Only send spawn coordinates near chunks
-        Server.getInstance().getWorld().getChunkList().forEach(chunk -> player.getNetworkManager().sendPacket(new OutPacketChunkData(chunk)));
+        player.getNetworkManager().sendPacket(new OutPacketChunkData(Server.getInstance().getWorld().getSpawnChunk(spawnLocation)));
 
         // Send the player its position and rotation (closes downloading terrain screen)
         player.getNetworkManager().sendPacket(new OutPacketPlayerPositionLook(
@@ -91,5 +91,8 @@ public class PlayerLoginManager {
 
         // Add the player to the world and send him information about the other players and the other players information about him
         Server.getInstance().getWorld().spawn(player, spawnLocation);
+
+        // Send remaining chunks
+        Server.getInstance().getWorld().getChunkList().forEach(chunk -> player.getNetworkManager().sendPacket(new OutPacketChunkData(chunk)));
     }
 }
