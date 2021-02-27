@@ -3,8 +3,8 @@ package net.servzero.server.player;
 import java.util.UUID;
 
 public class GameProfile {
-    private UUID uuid;
-    private String name;
+    private final UUID uuid;
+    private final String name;
 
     public GameProfile(UUID uuid, String name) {
         this.uuid = uuid;
