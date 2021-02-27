@@ -2,16 +2,20 @@ package net.servzero.server.entity;
 
 import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.out.entity.*;
+import net.servzero.network.packet.out.player.OutPacketSpawnPlayer;
 import net.servzero.server.Server;
 import net.servzero.server.player.Player;
 import net.servzero.server.world.Location;
 
+//TODO: Add world changes
 public class Entity {
     private static volatile int entityIdCounter = 0;
 
     private static synchronized int generateNewEntityId() {
         return entityIdCounter++;
     }
+
+    private static final int ENTITY_RENDER_DISTANCE = 16;
 
     private final int id;
     private Location lastLocation;
@@ -37,19 +41,73 @@ public class Entity {
         return true;
     }
 
-    private double distanceToSquared(Player player) {
+    public void teleport(Location location) {
+        setPositionAndRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+    }
+
+    public double distanceToSquared(Entity player) {
         return this.location.distanceToSquared(player.getLocation());
     }
 
-    private double distanceTo(Player player) {
+    public double distanceTo(Entity player) {
         return this.location.distanceTo(player.getLocation());
     }
 
-    public boolean isInViewDistance(Player player) {
-        return distanceTo(player) <= player.getSettings().getViewDistance();
+    public boolean isNewInRenderDistanceOf(Entity player) {
+        return distanceToSquared(player) <= Entity.ENTITY_RENDER_DISTANCE
+                && this.location.distanceToSquared(player.getLastLocation()) > Entity.ENTITY_RENDER_DISTANCE;
     }
 
-    public void setInitialLocation(Location location) {
+    public boolean isNewNotInRenderDistanceOf(Entity player) {
+        return distanceToSquared(player) > Entity.ENTITY_RENDER_DISTANCE
+                && this.location.distanceToSquared(player.getLastLocation()) <= Entity.ENTITY_RENDER_DISTANCE;
+    }
+
+    public boolean isInRenderDistanceOf(Entity player) {
+        return distanceToSquared(player) <= Entity.ENTITY_RENDER_DISTANCE;
+    }
+
+    private void updateVisibleEntities() {
+        if (!(this instanceof Player)) {
+            return;
+        }
+        Player thisPlayer = (Player) this;
+        Server.getInstance().getWorld().getEntityList().forEach(otherEntity -> {
+            if (otherEntity.isNewInRenderDistanceOf(this) || this.isNewInRenderDistanceOf(otherEntity)) {
+                if (otherEntity instanceof Player) {
+                    Player otherPlayer = (Player) otherEntity;
+                    sendPlayerSpawn(thisPlayer, otherPlayer);
+                    sendPlayerSpawn(otherPlayer, thisPlayer);
+                } else {
+                    //TODO: Add entity spawning and sending
+                }
+            } else if (otherEntity.isNewNotInRenderDistanceOf(this) || this.isNewNotInRenderDistanceOf(otherEntity)) {
+                sendDespawn(thisPlayer, otherEntity);
+                if (otherEntity instanceof Player) {
+                    Player otherPlayer = (Player) otherEntity;
+                    sendDespawn(otherPlayer, thisPlayer);
+                }
+            }
+        });
+    }
+
+    private void sendPlayerSpawn(Player toSend, Player toSpawn) {
+        toSend.networkManager.sendPacket(new OutPacketSpawnPlayer(
+                toSpawn.getId(),
+                toSpawn.getUniqueId(),
+                toSpawn.getLocation().getX(),
+                toSpawn.getLocation().getY(),
+                toSpawn.getLocation().getZ(),
+                toSpawn.getLocation().getYaw(),
+                toSpawn.getLocation().getPitch()
+        ));
+    }
+
+    private void sendDespawn(Player toSend, Entity toDespawn) {
+        toSend.networkManager.sendPacket(new OutPacketDestroyEntities(toDespawn.getId()));
+    }
+
+        public void setInitialLocation(Location location) {
         if (this.location == null) {
             this.location = location;
         }
@@ -69,11 +127,17 @@ public class Entity {
     }
 
     private void setPositionWithoutSending(double x, double y, double z) {
-        this.lastLocation = this.location;
+        this.lastLocation = this.location.clone();
+        this.location.setX(x);
+        this.location.setY(y);
+        this.location.setZ(z);
+        updateVisibleEntities();
     }
 
     private void setRotationWithoutSending(float yaw, float pitch) {
-        this.lastLocation = this.location;
+        this.lastLocation = this.location.clone();
+        this.location.setYaw(yaw);
+        this.location.setPitch(pitch);
     }
 
     public void setPosition(double x, double y, double z) {
@@ -171,7 +235,7 @@ public class Entity {
                 this.location.getPitch(),
                 this.isOnGround()
         );
-        sendToAllInRange(packet);
+        sendToAll(packet);
     }
 
     private DeltaPosition calculateDelta() {
@@ -191,12 +255,16 @@ public class Entity {
         return (short) ((current * 32 - prev * 32) * 128);
     }
 
-    private void sendToAllInRange(Packet<?> packet) {
+    private void sendToAll(Packet<?> packet) {
         Server.getInstance().getPlayerList().forEach(player -> player.networkManager.sendPacket(packet));
+    }
+
+    private void sendToAllInRange(Packet<?> packet) {
+        Server.getInstance().getPlayerList().stream().filter(this::isInRenderDistanceOf).forEach(player -> player.networkManager.sendPacket(packet));
     }
 
     private void sendToAllInRangeExceptThis(Packet<?> packet) {
         Player thisPlayer = (this instanceof Player) ? (Player) this : null;
-        Server.getInstance().getPlayerListExcept(thisPlayer).forEach(player -> player.networkManager.sendPacket(packet));
+        Server.getInstance().getPlayerListExcept(thisPlayer).stream().filter(this::isInRenderDistanceOf).forEach(player -> player.networkManager.sendPacket(packet));
     }
 }
