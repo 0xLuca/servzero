@@ -13,6 +13,7 @@ import net.servzero.server.world.World;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Server implements Runnable {
@@ -78,7 +79,14 @@ public class Server implements Runnable {
     }
 
     public List<Player> getPlayerList() {
-        return playerList;
+        return this.playerList;
+    }
+
+    public List<Player> getPlayerListExcept(Player... players) {
+        final List<Player> exceptions = Arrays.asList(players);
+        final List<Player> removed = new ArrayList<>(this.playerList);
+        removed.removeAll(exceptions);
+        return removed;
     }
 
     public void registerPlayer(Player player) {

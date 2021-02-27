@@ -80,7 +80,7 @@ public class World {
     }
 
     public void spawn(Entity entity, Location location) {
-        entity.teleport(location);
+        entity.setInitialLocation(location);
         entityList.add(entity);
 
         if (entity instanceof Player) {

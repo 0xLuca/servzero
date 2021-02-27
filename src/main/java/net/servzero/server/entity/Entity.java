@@ -1,11 +1,10 @@
 package net.servzero.server.entity;
 
-import net.servzero.network.packet.out.entity.OutPacketEntityHeadLook;
-import net.servzero.network.packet.out.entity.OutPacketEntityRelativeMoveLook;
-import net.servzero.network.packet.out.entity.OutPacketEntityTeleport;
+import net.servzero.network.packet.Packet;
+import net.servzero.network.packet.out.entity.*;
 import net.servzero.server.Server;
+import net.servzero.server.player.Player;
 import net.servzero.server.world.Location;
-import net.servzero.server.world.block.Coordinate;
 
 public class Entity {
     private static volatile int entityIdCounter = 0;
@@ -22,6 +21,10 @@ public class Entity {
         this.id = generateNewEntityId();
     }
 
+    public int getId() {
+        return id;
+    }
+
     public Location getLastLocation() {
         return lastLocation;
     }
@@ -30,44 +33,111 @@ public class Entity {
         return location;
     }
 
-    public void teleport(Location location) {
-        updateLocationAndTeleport(() -> this.location = location);
+    public boolean isOnGround() {
+        return true;
     }
 
-    private void updateLocationAndTeleport(Runnable runnable) {
-        updateLocation(runnable);
-        final double x = this.location.getX();
-        final double y = this.location.getY();
-        final double z = this.location.getZ();
-        final float yaw = this.location.getYaw();
-        final float pitch = this.location.getPitch();
-        Server.getInstance().getPlayerList().forEach(player -> {
-            player.networkManager.sendPacket(new OutPacketEntityTeleport(
-                    this.id,
-                    x,
-                    y,
-                    z,
-                    yaw,
-                    pitch,
-                    true
-            ));
-        });
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    private void updateLocation(Runnable runnable) {
-        this.lastLocation = this.location == null ? null : this.location.clone();
-        runnable.run();
-        if (this.lastLocation == null) {
-            this.lastLocation = this.location;
+    public void setInitialLocation(Location location) {
+        if (this.location == null) {
+            this.location = location;
         }
     }
 
-    public void updateLocationAndSend(Runnable runnable) {
-        updateLocation(runnable);
+    private boolean hasPositionChanged(double newX, double newY, double newZ) {
+        final double currentX = this.location.getX();
+        final double currentY = this.location.getY();
+        final double currentZ = this.location.getZ();
+        return newX != currentX || newY != currentY || newZ != currentZ;
+    }
+
+    private boolean hasRotationChanged(float newYaw, float newPitch) {
+        final float currentYaw = this.location.getYaw();
+        final float currentPitch = this.location.getPitch();
+        return newYaw != currentYaw || newPitch != currentPitch;
+    }
+
+    private void setPositionWithoutSending(double x, double y, double z) {
+        this.lastLocation = this.location;
+    }
+
+    private void setRotationWithoutSending(float yaw, float pitch) {
+        this.lastLocation = this.location;
+    }
+
+    public void setPosition(double x, double y, double z) {
+        setPositionAndRotation(x, y, z, this.location.getYaw(), this.location.getPitch());
+    }
+
+    public void setRotation(float yaw, float pitch) {
+        setPositionAndRotation(this.location.getX(), this.location.getY(), this.location.getZ(), yaw, pitch);
+    }
+
+    public void setPositionAndRotation(double x, double y, double z, float yaw, float pitch) {
+        final boolean posChanged = hasPositionChanged(x, y, z);
+        final boolean rotChanged = hasRotationChanged(yaw, pitch);
+
+        if (posChanged && rotChanged) {
+            setPositionWithoutSending(x, y, z);
+            setRotationWithoutSending(yaw, pitch);
+            sendPositionAndRotation();
+        } else if (posChanged) {
+            setPositionWithoutSending(x, y, z);
+            sendPosition();
+        } else if (rotChanged) {
+            setRotationWithoutSending(yaw, pitch);
+            sendRotation();
+        }
+    }
+
+    private void sendPositionAndRotation() {
+        OutPacketEntityRelativeMoveLook packet;
+        final DeltaPosition delta = calculateDelta();
+        packet = new OutPacketEntityRelativeMoveLook(
+                this.id,
+                delta.getDeltaX(),
+                delta.getDeltaY(),
+                delta.getDeltaZ(),
+                this.location.getYaw(),
+                this.location.getPitch(),
+                this.isOnGround()
+        );
+        sendToAllExceptThis(packet);
+        sendHeadLook();
+    }
+
+    private void sendPosition() {
+        OutPacketEntityRelativeMove packet;
+        final DeltaPosition delta = calculateDelta();
+        packet = new OutPacketEntityRelativeMove(
+                this.id,
+                delta.getDeltaX(),
+                delta.getDeltaY(),
+                delta.getDeltaZ(),
+                this.isOnGround()
+        );
+        sendToAllExceptThis(packet);
+    }
+
+    private void sendRotation() {
+        OutPacketEntityLook packet = new OutPacketEntityLook(
+                this.id,
+                this.location.getYaw(),
+                this.location.getPitch(),
+                this.isOnGround()
+        );
+        sendToAllExceptThis(packet);
+        sendHeadLook();
+    }
+
+    private void sendHeadLook() {
+        OutPacketEntityHeadLook packet = new OutPacketEntityHeadLook(
+                this.id,
+                this.location.getYaw()
+        );
+        sendToAllExceptThis(packet);
+    }
+
+    private DeltaPosition calculateDelta() {
         final double currentX = this.location.getX();
         final double currentY = this.location.getY();
         final double currentZ = this.location.getZ();
@@ -77,21 +147,15 @@ public class Entity {
         final short deltaX = getDelta(currentX, prevX);
         final short deltaY = getDelta(currentY, prevY);
         final short deltaZ = getDelta(currentZ, prevZ);
-        Server.getInstance().getPlayerList().stream().filter(player -> !player.equals(this)).forEach(player -> {
-            player.networkManager.sendPacket(new OutPacketEntityRelativeMoveLook(
-                    this.id,
-                    deltaX,
-                    deltaY,
-                    deltaZ,
-                    this.location.getYaw(),
-                    this.location.getPitch(),
-                    true
-            ));
-            player.networkManager.sendPacket(new OutPacketEntityHeadLook(this.id, this.location.getYaw()));
-        });
+        return new DeltaPosition(deltaX, deltaY, deltaZ);
     }
 
     private short getDelta(double current, double prev) {
         return (short) ((current * 32 - prev * 32) * 128);
+    }
+
+    private void sendToAllExceptThis(Packet<?> packet) {
+        Player thisPlayer = (this instanceof Player) ? (Player) this : null;
+        Server.getInstance().getPlayerListExcept(thisPlayer).forEach(player -> player.networkManager.sendPacket(packet));
     }
 }
