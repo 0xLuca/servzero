@@ -75,11 +75,28 @@ public class Chunk {
         serializer.writeInt(this.coordinate.getChunkX()); //chunkX
         serializer.writeInt(this.coordinate.getChunkZ()); //chunkZ
         serializer.writeBoolean(true); //groundupcontinous (new chunk drop all)
-        serializer.writeVarInt(65535); //bitmask
+        int bits = 0;
+        if (sections[0].hasBlocks()) bits += 1;
+        if (sections[1].hasBlocks()) bits += 2;
+        if (sections[2].hasBlocks()) bits += 4;
+        if (sections[3].hasBlocks()) bits += 8;
+        if (sections[4].hasBlocks()) bits += 16;
+        if (sections[5].hasBlocks()) bits += 32;
+        if (sections[6].hasBlocks()) bits += 64;
+        if (sections[7].hasBlocks()) bits += 128;
+        if (sections[8].hasBlocks()) bits += 256;
+        if (sections[9].hasBlocks()) bits += 512;
+        if (sections[10].hasBlocks()) bits += 1024;
+        if (sections[11].hasBlocks()) bits += 2048;
+        if (sections[12].hasBlocks()) bits += 4096;
+        if (sections[13].hasBlocks()) bits += 8192;
+        if (sections[14].hasBlocks()) bits += 16384;
+        if (sections[15].hasBlocks()) bits += 32768;
+        serializer.writeVarInt(bits); //bitmask
         PacketDataSerializer buffer = new PacketDataSerializer(Unpooled.buffer());
-        Arrays.stream(this.sections).forEach(section -> section.write(buffer));
+        Arrays.stream(this.sections).filter(ChunkSection::hasBlocks).forEach(section -> section.write(buffer));
         serializer.writeVarInt(buffer.readableBytes() + 256); //length
-        Arrays.stream(this.sections).forEach(section -> section.write(serializer)); //data
+        Arrays.stream(this.sections).filter(ChunkSection::hasBlocks).forEach(section -> section.write(serializer)); //data
         for (int i = 0; i < 256; i++) {
             serializer.writeByte(0);
         }

@@ -89,7 +89,7 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
                 action = -1;
         }
 
-        this.player.getWorld().getBlockAt(this.player.getLocation().asPosition()).setType(Blocks.STONE);
+        //this.player.getWorld().getBlockAt(this.player.getLocation().asPosition()).setType(Blocks.STONE);
 
         Server.getInstance().getPlayerList().stream().filter(onlinePlayer -> !onlinePlayer.equals(this.player)).forEach(onlinePlayer -> {
             onlinePlayer.getNetworkManager().sendPacket(new OutPacketAnimation(this.player.getId(), action));

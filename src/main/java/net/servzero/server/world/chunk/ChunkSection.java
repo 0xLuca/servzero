@@ -6,12 +6,15 @@ import net.servzero.server.world.block.BlockState;
 import net.servzero.server.world.block.Blocks;
 import net.servzero.server.world.block.Position;
 
+import java.util.Arrays;
+
 public class ChunkSection {
     private static final int BITS_PER_BLOCK = 13;
 
     private final Chunk parent;
     private int y;
     private final Block[][][] blocks = new Block[16][16][16];
+    private final Block[][][] emptyComparisonBlocks = new Block[16][16][16];
 
     public ChunkSection(Chunk parent, int sectionY) {
         this.parent = parent;
@@ -120,5 +123,9 @@ public class ChunkSection {
                 }
             }
         }
+    }
+
+    public boolean hasBlocks() {
+        return !Arrays.deepEquals(this.blocks, this.emptyComparisonBlocks);
     }
 }
