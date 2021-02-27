@@ -1,5 +1,6 @@
 package net.servzero.server.entity;
 
+import net.servzero.logger.Logger;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.out.entity.*;
 import net.servzero.network.packet.out.player.OutPacketSpawnPlayer;
@@ -41,6 +42,13 @@ public class Entity {
         return true;
     }
 
+    public void setInitialLocation(Location location) {
+        if (this.location == null) {
+            this.location = location;
+        }
+        sendTeleport();
+    }
+
     public void teleport(Location location) {
         setPositionAndRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
     }
@@ -54,17 +62,17 @@ public class Entity {
     }
 
     public boolean isNewInRenderDistanceOf(Entity player) {
-        return distanceToSquared(player) <= Entity.ENTITY_RENDER_DISTANCE
-                && this.location.distanceToSquared(player.getLastLocation()) > Entity.ENTITY_RENDER_DISTANCE;
+        return distanceTo(player) <= Entity.ENTITY_RENDER_DISTANCE
+                && this.location.distanceTo(player.getLastLocation()) > Entity.ENTITY_RENDER_DISTANCE;
     }
 
     public boolean isNewNotInRenderDistanceOf(Entity player) {
-        return distanceToSquared(player) > Entity.ENTITY_RENDER_DISTANCE
-                && this.location.distanceToSquared(player.getLastLocation()) <= Entity.ENTITY_RENDER_DISTANCE;
+        return distanceTo(player) > Entity.ENTITY_RENDER_DISTANCE
+                && this.location.distanceTo(player.getLastLocation()) <= Entity.ENTITY_RENDER_DISTANCE;
     }
 
     public boolean isInRenderDistanceOf(Entity player) {
-        return distanceToSquared(player) <= Entity.ENTITY_RENDER_DISTANCE;
+        return distanceTo(player) <= Entity.ENTITY_RENDER_DISTANCE;
     }
 
     private void updateVisibleEntities() {
@@ -101,16 +109,14 @@ public class Entity {
                 toSpawn.getLocation().getYaw(),
                 toSpawn.getLocation().getPitch()
         ));
+        toSend.networkManager.sendPacket(new OutPacketEntityHeadLook(
+                toSpawn.getId(),
+                toSpawn.getLocation().getYaw()
+        ));
     }
 
     private void sendDespawn(Player toSend, Entity toDespawn) {
         toSend.networkManager.sendPacket(new OutPacketDestroyEntities(toDespawn.getId()));
-    }
-
-        public void setInitialLocation(Location location) {
-        if (this.location == null) {
-            this.location = location;
-        }
     }
 
     private boolean hasPositionChanged(double newX, double newY, double newZ) {
@@ -126,8 +132,11 @@ public class Entity {
         return newYaw != currentYaw || newPitch != currentPitch;
     }
 
-    private void setPositionWithoutSending(double x, double y, double z) {
+    private void saveLastLocation() {
         this.lastLocation = this.location.clone();
+    }
+
+    private void setPositionWithoutSending(double x, double y, double z) {
         this.location.setX(x);
         this.location.setY(y);
         this.location.setZ(z);
@@ -135,7 +144,6 @@ public class Entity {
     }
 
     private void setRotationWithoutSending(float yaw, float pitch) {
-        this.lastLocation = this.location.clone();
         this.location.setYaw(yaw);
         this.location.setPitch(pitch);
     }
@@ -151,6 +159,12 @@ public class Entity {
     public void setPositionAndRotation(double x, double y, double z, float yaw, float pitch) {
         final boolean posChanged = hasPositionChanged(x, y, z);
         final boolean rotChanged = hasRotationChanged(yaw, pitch);
+
+        if (!posChanged && !rotChanged) {
+            return;
+        }
+
+        saveLastLocation();
 
         if (posChanged && rotChanged) {
             setPositionWithoutSending(x, y, z);

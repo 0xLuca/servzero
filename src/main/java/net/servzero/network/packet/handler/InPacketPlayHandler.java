@@ -54,30 +54,17 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
 
     @Override
     public void handlePlayerPosition(InPacketPlayerPosition packet) {
-        this.player.updateLocationAndSend(() -> {
-            this.player.getLocation().setX(packet.getX());
-            this.player.getLocation().setY(packet.getY());
-            this.player.getLocation().setZ(packet.getZ());
-        });
+        this.player.setPosition(packet.getX(), packet.getY(), packet.getZ());
     }
 
     @Override
     public void handlePlayerLook(InPacketPlayerLook packet) {
-        this.player.updateLocationAndSend(() -> {
-            this.player.getLocation().setYaw(packet.getYaw());
-            this.player.getLocation().setPitch(packet.getPitch());
-        });
+        this.player.setRotation(packet.getYaw(), packet.getPitch());
     }
 
     @Override
     public void handlePlayerPositionLook(InPacketPlayerPositionLook packet) {
-        this.player.updateLocationAndSend(() -> {
-            this.player.getLocation().setX(packet.getX());
-            this.player.getLocation().setY(packet.getY());
-            this.player.getLocation().setZ(packet.getZ());
-            this.player.getLocation().setYaw(packet.getYaw());
-            this.player.getLocation().setPitch(packet.getPitch());
-        });
+        this.player.setPositionAndRotation(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch());
     }
 
     @Override

@@ -15,7 +15,6 @@ public class PlayerLoginManager {
         GameProfile profile = player.getProfile();
         Location spawnLocation = new Location(Server.getInstance().getWorld(), 0, 1, 0, 0, 0);
         Server.getInstance().registerPlayer(player);
-        Server.getInstance().getWorld().spawn(player, spawnLocation);
 
         //TODO: Send real information
 
@@ -42,6 +41,7 @@ public class PlayerLoginManager {
                 spawnLocation.getYaw(),
                 spawnLocation.getPitch(),
                 (byte) 0));
+
         List<Player> onlinePlayerList = Server.getInstance().getPlayerList();
         player.networkManager.sendPacket(new OutPacketPlayerListItem(
                 EnumPlayerListAction.ADD_PLAYER,
@@ -72,5 +72,7 @@ public class PlayerLoginManager {
             ));
         });
         player.networkManager.sendPacket(new OutPacketPlayerAbilities(true, false, true, false, 0.1F, 0.0F));
+
+        Server.getInstance().getWorld().spawn(player, spawnLocation);
     }
 }
