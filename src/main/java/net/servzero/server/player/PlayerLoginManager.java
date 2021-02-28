@@ -3,8 +3,11 @@ package net.servzero.server.player;
 import net.servzero.network.packet.handler.InPacketPlayHandler;
 import net.servzero.network.packet.out.*;
 import net.servzero.network.packet.out.player.OutPacketPlayerPositionLook;
+import net.servzero.network.packet.out.player.OutPacketSetSlot;
 import net.servzero.server.Server;
 import net.servzero.server.game.*;
+import net.servzero.server.inventory.ItemStack;
+import net.servzero.server.inventory.item.Material;
 import net.servzero.server.world.Location;
 
 import java.util.ArrayList;
@@ -94,5 +97,9 @@ public class PlayerLoginManager {
 
         // Send remaining chunks
         Server.getInstance().getWorld().getChunkList().forEach(chunk -> player.getNetworkManager().sendPacket(new OutPacketChunkData(chunk)));
+
+        // Send inventory items
+        // TODO: Send player inventory instead of hardcoded stone
+        player.getNetworkManager().sendPacket(new OutPacketSetSlot(0, 36, new ItemStack(Material.STONE, 0, 64)));
     }
 }

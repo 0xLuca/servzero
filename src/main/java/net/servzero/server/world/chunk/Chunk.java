@@ -2,6 +2,7 @@ package net.servzero.server.world.chunk;
 
 import io.netty.buffer.Unpooled;
 import net.servzero.helper.Validator;
+import net.servzero.network.packet.serialization.ISerializable;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
 import net.servzero.server.world.World;
 import net.servzero.server.world.block.Block;
@@ -10,7 +11,7 @@ import net.servzero.server.world.block.Position;
 
 import java.util.Arrays;
 
-public class Chunk {
+public class Chunk implements ISerializable<PacketDataSerializer> {
 
     private final World world;
     private final ChunkCoordinate coordinate;
@@ -71,6 +72,7 @@ public class Chunk {
         section.setBlock(position, state);
     }
 
+    @Override
     public void write(PacketDataSerializer serializer) {
         serializer.writeInt(this.coordinate.getChunkX()); //chunkX
         serializer.writeInt(this.coordinate.getChunkZ()); //chunkZ

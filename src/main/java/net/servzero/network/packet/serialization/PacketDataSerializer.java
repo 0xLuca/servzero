@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBufAllocator;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import io.netty.util.ByteProcessor;
+import net.servzero.server.inventory.ItemStack;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -105,6 +106,7 @@ public class PacketDataSerializer extends ByteBuf {
 
         return this;
     }
+
     public <T extends Enum<T>> T readEnum(Class<T> oclass) {
         return ((T[]) oclass.getEnumConstants())[this.readVarInt()]; // CraftBukkit - fix decompile error
     }
@@ -214,6 +216,17 @@ public class PacketDataSerializer extends ByteBuf {
 
     public PacketDataSerializer writeDate(Date date) {
         this.writeLong(date.getTime());
+        return this;
+    }
+
+    public PacketDataSerializer writeItemStack(ItemStack stack) {
+        this.writeShort(stack.getMaterial().getId());
+        this.writeByte(stack.getCount());
+        this.writeShort(stack.getData());
+
+        // TODO: Write NBT Data
+        this.writeByte(0);
+
         return this;
     }
 

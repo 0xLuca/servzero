@@ -10,6 +10,7 @@ import net.servzero.network.packet.in.player.*;
 import net.servzero.network.packet.out.*;
 import net.servzero.network.packet.out.entity.*;
 import net.servzero.network.packet.out.player.OutPacketPlayerPositionLook;
+import net.servzero.network.packet.out.player.OutPacketSetSlot;
 import net.servzero.network.packet.out.player.OutPacketSoundEffect;
 import net.servzero.network.packet.out.player.OutPacketSpawnPlayer;
 
@@ -42,6 +43,7 @@ public enum EnumProtocol {
         this.addPacket(0x0B, EnumProtocolDirection.TO_CLIENT, OutPacketBlockChange.class);
         this.addPacket(0x0D, EnumProtocolDirection.TO_CLIENT, OutPacketDifficulty.class);
         this.addPacket(0x0F, EnumProtocolDirection.TO_CLIENT, OutPacketChatMessage.class);
+        this.addPacket(0x16, EnumProtocolDirection.TO_CLIENT, OutPacketSetSlot.class);
         this.addPacket(0x1A, EnumProtocolDirection.TO_CLIENT, OutPacketDisconnect.class);
         this.addPacket(0x1B, EnumProtocolDirection.TO_CLIENT, OutPacketEntityStatus.class);
         this.addPacket(0x1F, EnumProtocolDirection.TO_CLIENT, OutPacketKeepAlive.class);

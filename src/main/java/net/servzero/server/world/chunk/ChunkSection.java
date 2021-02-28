@@ -1,5 +1,6 @@
 package net.servzero.server.world.chunk;
 
+import net.servzero.network.packet.serialization.ISerializable;
 import net.servzero.network.packet.serialization.PacketDataSerializer;
 import net.servzero.server.world.block.Block;
 import net.servzero.server.world.block.BlockState;
@@ -8,7 +9,7 @@ import net.servzero.server.world.block.Position;
 
 import java.util.Arrays;
 
-public class ChunkSection {
+public class ChunkSection implements ISerializable<PacketDataSerializer> {
     private static final int BITS_PER_BLOCK = 13;
 
     private final Chunk parent;
@@ -82,6 +83,7 @@ public class ChunkSection {
         return coord;
     }
 
+    @Override
     public void write(PacketDataSerializer serializer) {
         serializer.writeByte(BITS_PER_BLOCK);
         serializer.writeVarInt(0);
