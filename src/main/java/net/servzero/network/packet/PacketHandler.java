@@ -1,12 +1,12 @@
 package net.servzero.network.packet;
 
-import net.servzero.network.NetworkManager;
+import net.servzero.network.NetworkHandler;
 
 public abstract class PacketHandler {
-    protected NetworkManager networkManager;
+    protected NetworkHandler networkHandler;
 
-    public PacketHandler(NetworkManager networkManager) {
-        this.networkManager = networkManager;
+    public PacketHandler(NetworkHandler networkHandler) {
+        this.networkHandler = networkHandler;
     }
 
     public abstract void handle(Packet<?> packet);

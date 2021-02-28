@@ -145,7 +145,7 @@ public class Entity {
         this.location.setX(x);
         this.location.setY(y);
         this.location.setZ(z);
-        //updateVisibleEntities();
+        updateVisibleEntities();
     }
 
     private void setRotationWithoutSending(float yaw, float pitch) {

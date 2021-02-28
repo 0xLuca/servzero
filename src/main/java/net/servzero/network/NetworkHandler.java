@@ -15,7 +15,7 @@ import net.servzero.server.player.PlayerLogoutManager;
 
 import java.net.SocketAddress;
 
-public class NetworkManager extends SimpleChannelInboundHandler<Packet<PacketHandler>> {
+public class NetworkHandler extends SimpleChannelInboundHandler<Packet<PacketHandler>> {
     private Player owner = null;
 
     private Channel channel;
@@ -27,7 +27,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<PacketHan
 
     private int protocolVersion;
 
-    public NetworkManager(EnumProtocolDirection protocolDirection) {
+    public NetworkHandler(EnumProtocolDirection protocolDirection) {
         this.protocolDirection = protocolDirection;
     }
 
@@ -67,8 +67,10 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<PacketHan
 
     public void sendPacket(Packet<?> packet) {
         if (this.isConnected()) {
+            Logger.info("Sending packet: " + packet.getClass().getSimpleName());
+
             final EnumProtocol packetProtocol = EnumProtocol.getByPacket(packet);
-            final EnumProtocol currentProtocol = this.channel.attr(NetworkManager.protocolAttributeKey).get();
+            final EnumProtocol currentProtocol = this.channel.attr(NetworkHandler.protocolAttributeKey).get();
 
             if (packetProtocol != currentProtocol) {
                 this.channel.config().setAutoRead(false);
@@ -123,7 +125,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<PacketHan
     }
 
     public void setProtocol(EnumProtocol protocol) {
-        this.channel.attr(NetworkManager.protocolAttributeKey).set(protocol);
+        this.channel.attr(NetworkHandler.protocolAttributeKey).set(protocol);
         this.channel.config().setAutoRead(true);
         this.protocol = protocol;
     }

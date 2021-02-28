@@ -1,5 +1,6 @@
 package net.servzero.server.world;
 
+import net.servzero.helper.Schedulers;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.out.entity.OutPacketDestroyEntities;
 import net.servzero.network.packet.out.entity.OutPacketEntityHeadLook;
@@ -162,24 +163,28 @@ public class World {
                         location.getYaw(),
                         location.getPitch()
                 ));
-
-                // Spawn other player to new player
-                newPlayer.getNetworkManager().sendPacket(new OutPacketSpawnPlayer(
-                        onlinePlayer.getId(),
-                        onlinePlayer.getUniqueId(),
-                        onlinePlayer.getLocation().getX(),
-                        onlinePlayer.getLocation().getY(),
-                        onlinePlayer.getLocation().getZ(),
-                        onlinePlayer.getLocation().getYaw(),
-                        onlinePlayer.getLocation().getPitch()
-                ));
-
-                // Send other player's head rotation to new player
-                newPlayer.getNetworkManager().sendPacket(new OutPacketEntityHeadLook(
-                        onlinePlayer.getId(),
-                        onlinePlayer.getLocation().getYaw()
-                ));
             });
+
+            Schedulers.runLaterAsync(() -> {
+                Server.getInstance().getPlayerList().stream().filter(player -> player.getLocation().getWorld().equals(this) && !entity.equals(player)).forEach(onlinePlayer -> {
+                    // Spawn other player to new player
+                    newPlayer.getNetworkManager().sendPacket(new OutPacketSpawnPlayer(
+                            onlinePlayer.getId(),
+                            onlinePlayer.getUniqueId(),
+                            onlinePlayer.getLocation().getX(),
+                            onlinePlayer.getLocation().getY(),
+                            onlinePlayer.getLocation().getZ(),
+                            onlinePlayer.getLocation().getYaw(),
+                            onlinePlayer.getLocation().getPitch()
+                    ));
+
+                    // Send other player's head rotation to new player
+                    newPlayer.getNetworkManager().sendPacket(new OutPacketEntityHeadLook(
+                            onlinePlayer.getId(),
+                            onlinePlayer.getLocation().getYaw()
+                    ));
+                });
+            }, 50L);
         }
     }
 

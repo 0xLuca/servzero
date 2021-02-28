@@ -1,29 +1,29 @@
 package net.servzero.network.packet.handler;
 
-import net.servzero.network.NetworkManager;
+import net.servzero.network.NetworkHandler;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.in.InPacketHandshakeSetProtocol;
 import net.servzero.network.protocol.EnumProtocol;
 
 public class InPacketHandshakeHandler extends AbstractInPacketHandshakeHandler {
 
-    public InPacketHandshakeHandler(NetworkManager networkManager) {
-        super(networkManager);
+    public InPacketHandshakeHandler(NetworkHandler networkHandler) {
+        super(networkHandler);
     }
 
     @Override
     public void handle(InPacketHandshakeSetProtocol packet) {
-        this.networkManager.setProtocolVersion(packet.getVersion());
+        this.networkHandler.setProtocolVersion(packet.getVersion());
         switch (packet.getProtocol()) {
             case LOGIN:
-                this.networkManager.setProtocol(EnumProtocol.LOGIN);
-                this.networkManager.setPacketHandler(new InPacketLoginHandler(this.networkManager));
+                this.networkHandler.setProtocol(EnumProtocol.LOGIN);
+                this.networkHandler.setPacketHandler(new InPacketLoginHandler(this.networkHandler));
                 // TODO: Implement login
                 break;
             case STATUS:
-                this.networkManager.setProtocol(EnumProtocol.STATUS);
-                InPacketStatusHandler handler = new InPacketStatusHandler(this.networkManager);
-                this.networkManager.setPacketHandler(handler);
+                this.networkHandler.setProtocol(EnumProtocol.STATUS);
+                InPacketStatusHandler handler = new InPacketStatusHandler(this.networkHandler);
+                this.networkHandler.setPacketHandler(handler);
                 break;
             default:
                 throw new UnsupportedOperationException("Ivalid intention: " + packet.getProtocol());

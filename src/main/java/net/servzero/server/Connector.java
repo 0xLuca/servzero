@@ -10,7 +10,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import net.servzero.logger.Logger;
-import net.servzero.network.NetworkManager;
+import net.servzero.network.NetworkHandler;
 import net.servzero.network.packet.handler.InPacketHandshakeHandler;
 import net.servzero.network.packet.serialization.PacketDecoder;
 import net.servzero.network.packet.serialization.PacketEncoder;
@@ -24,7 +24,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Connector {
     private CopyOnWriteArrayList<ChannelFuture> channels = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<NetworkManager> networkManagers = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<NetworkHandler> networkHandlers = new CopyOnWriteArrayList<>();
 
     public void initialize(InetAddress address, int port) throws IOException {
         Class<? extends ServerSocketChannel> channelClass;
@@ -48,7 +48,7 @@ public class Connector {
                     protected void initChannel(Channel channel) {
                         channel.config().setOption(ChannelOption.TCP_NODELAY, true);
 
-                        NetworkManager networkManager = new NetworkManager(EnumProtocolDirection.TO_SERVER);
+                        NetworkHandler networkHandler = new NetworkHandler(EnumProtocolDirection.TO_SERVER);
 
 
                         channel.pipeline()
@@ -57,8 +57,8 @@ public class Connector {
                                 .addLast("prepender", new PacketPrepender())
                                 .addLast("encoder", new PacketEncoder(EnumProtocolDirection.TO_CLIENT));
 
-                        channel.pipeline().addLast("packet_handler", networkManager);
-                        networkManager.setPacketHandler(new InPacketHandshakeHandler(networkManager));
+                        channel.pipeline().addLast("packet_handler", networkHandler);
+                        networkHandler.setPacketHandler(new InPacketHandshakeHandler(networkHandler));
                     }
                 })
                 .localAddress(address, port)

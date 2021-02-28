@@ -1,13 +1,13 @@
 package net.servzero.network.packet.handler;
 
-import net.servzero.network.NetworkManager;
+import net.servzero.network.NetworkHandler;
 import net.servzero.network.packet.PacketHandler;
 import net.servzero.network.packet.in.*;
 import net.servzero.network.packet.in.player.*;
 
 public abstract class AbstractInPacketPlayHandler extends PacketHandler {
-    public AbstractInPacketPlayHandler(NetworkManager networkManager) {
-        super(networkManager);
+    public AbstractInPacketPlayHandler(NetworkHandler networkHandler) {
+        super(networkHandler);
     }
 
     public abstract void handleClientSettings(InPacketClientSettings packet);

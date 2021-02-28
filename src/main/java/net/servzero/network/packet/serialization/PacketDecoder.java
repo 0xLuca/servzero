@@ -3,7 +3,7 @@ package net.servzero.network.packet.serialization;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import net.servzero.network.NetworkManager;
+import net.servzero.network.NetworkHandler;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.protocol.EnumProtocolDirection;
 import net.servzero.server.Server;
@@ -28,7 +28,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
                 removeOverflow(packetDataSerializer);
                 return;
             }
-            Optional<? extends Packet<?>> optionalPacket = ctx.channel().attr(NetworkManager.protocolAttributeKey).get().getPacket(this.direction, packetId);
+            Optional<? extends Packet<?>> optionalPacket = ctx.channel().attr(NetworkHandler.protocolAttributeKey).get().getPacket(this.direction, packetId);
             if (optionalPacket.isEmpty()) {
                 removeOverflow(packetDataSerializer);
                 throw new IOException("Bad packet id: " + packetId);

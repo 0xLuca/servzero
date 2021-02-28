@@ -3,7 +3,7 @@ package net.servzero.network.packet.serialization;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-import net.servzero.network.NetworkManager;
+import net.servzero.network.NetworkHandler;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.protocol.EnumProtocol;
 import net.servzero.network.protocol.EnumProtocolDirection;
@@ -21,7 +21,7 @@ public class PacketEncoder extends MessageToByteEncoder<Packet<?>> {
     }
 
     protected void encode(ChannelHandlerContext channelhandlercontext, Packet<?> packet, ByteBuf byteBuf) throws Exception {
-        EnumProtocol protocol = channelhandlercontext.channel().attr(NetworkManager.protocolAttributeKey).get();
+        EnumProtocol protocol = channelhandlercontext.channel().attr(NetworkHandler.protocolAttributeKey).get();
         int packetId = protocol.getPacketId(this.direction, packet);
 
         if (packetId < 0) {
