@@ -23,7 +23,8 @@ public class Server implements Runnable {
         add(0x4D); // Advancements
         add(0x07); // Window click
         add(0x15); // Entity Action
-        add(0x14); // Player dig
+        add(0x1B); // Creative inventory action
+        add(0x20); // Use item (not place)
     }};
 
     public final Thread mainThread;

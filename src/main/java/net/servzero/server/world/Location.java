@@ -3,6 +3,8 @@ package net.servzero.server.world;
 import net.servzero.helper.MathHelper;
 import net.servzero.server.world.block.Position;
 
+import java.util.Objects;
+
 public class Location {
     private final World world;
     private volatile double x;
@@ -20,8 +22,7 @@ public class Location {
         this.pitch = pitch;
     }
 
-    public static Location fromCoordinate(World world, Position position) {
-        System.out.println("getting location from " + Thread.currentThread().getStackTrace()[2].getClassName());
+    public static Location fromPosition(World world, Position position) {
         return get(world, position.getX(), position.getY(), position.getZ(), 0, 0);
     }
 
@@ -108,5 +109,20 @@ public class Location {
     @Override
     public Location clone() {
         return new Location(this.world, this.x, this.y, this.z, this.yaw, this.pitch);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Location location = (Location) o;
+        int tempX = (int) x - (x < 0 ? 1 : 0);
+        int tempZ = (int) z - (z < 0 ? 1 : 0);
+        return (int) location.x == tempX && (int) location.y == (int) y && (int) location.z == tempZ && Objects.equals(world, location.world);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(world, x, y, z);
     }
 }

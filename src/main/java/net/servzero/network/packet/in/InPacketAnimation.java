@@ -12,7 +12,7 @@ public class InPacketAnimation implements Packet<AbstractInPacketPlayHandler> {
 
     @Override
     public void read(PacketDataSerializer serializer) throws IOException {
-        this.hand = EnumHand.getById(serializer.readVarInt());
+        this.hand = serializer.readEnum(EnumHand.class);
     }
 
     @Override

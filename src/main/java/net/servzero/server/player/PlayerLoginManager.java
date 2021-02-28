@@ -28,7 +28,7 @@ public class PlayerLoginManager {
         // Send the client the game info
         player.getNetworkManager().sendPacket(new OutPacketJoinGame(
                 player.getId(),
-                EnumGameMode.SURVIVAL,
+                player.getGameMode(),
                 EnumDimension.OVERWORLD,
                 EnumDifficulty.PEACEFUL,
                 100,
@@ -62,7 +62,7 @@ public class PlayerLoginManager {
                     onlinePlayerList.forEach(onlinePlayer -> add(new OutPacketPlayerListItem.PlayerListItem(
                             onlinePlayer.getUniqueId(),
                             20,
-                            EnumGameMode.SURVIVAL,
+                            onlinePlayer.getGameMode(),
                             onlinePlayer.getProfile(),
                             onlinePlayer.getName()
                     )));
@@ -78,7 +78,7 @@ public class PlayerLoginManager {
                         add(new OutPacketPlayerListItem.PlayerListItem(
                                 player.getUniqueId(),
                                 20,
-                                EnumGameMode.SURVIVAL,
+                                player.getGameMode(),
                                 player.getProfile(),
                                 player.getName()
                         ));

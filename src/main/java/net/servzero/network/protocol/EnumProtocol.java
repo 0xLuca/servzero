@@ -6,13 +6,11 @@ import com.google.common.collect.Maps;
 import net.servzero.logger.Logger;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.in.*;
-import net.servzero.network.packet.in.player.InPacketPlayer;
-import net.servzero.network.packet.in.player.InPacketPlayerLook;
-import net.servzero.network.packet.in.player.InPacketPlayerPosition;
-import net.servzero.network.packet.in.player.InPacketPlayerPositionLook;
+import net.servzero.network.packet.in.player.*;
 import net.servzero.network.packet.out.*;
 import net.servzero.network.packet.out.entity.*;
 import net.servzero.network.packet.out.player.OutPacketPlayerPositionLook;
+import net.servzero.network.packet.out.player.OutPacketSoundEffect;
 import net.servzero.network.packet.out.player.OutPacketSpawnPlayer;
 
 import java.lang.reflect.InvocationTargetException;
@@ -35,8 +33,10 @@ public enum EnumProtocol {
         this.addPacket(0x0D, EnumProtocolDirection.TO_SERVER, InPacketPlayerPosition.class);
         this.addPacket(0x0E, EnumProtocolDirection.TO_SERVER, InPacketPlayerPositionLook.class);
         this.addPacket(0x0F, EnumProtocolDirection.TO_SERVER, InPacketPlayerLook.class);
+        this.addPacket(0x14, EnumProtocolDirection.TO_SERVER, InPacketPlayerDig.class);
         this.addPacket(0x1A, EnumProtocolDirection.TO_SERVER, InPacketHeldItemChange.class);
         this.addPacket(0x1D, EnumProtocolDirection.TO_SERVER, InPacketAnimation.class);
+        this.addPacket(0x1F, EnumProtocolDirection.TO_SERVER, InPacketPlayerBlockPlace.class);
         this.addPacket(0x05, EnumProtocolDirection.TO_CLIENT, OutPacketSpawnPlayer.class);
         this.addPacket(0x06, EnumProtocolDirection.TO_CLIENT, OutPacketAnimation.class);
         this.addPacket(0x0B, EnumProtocolDirection.TO_CLIENT, OutPacketBlockChange.class);
@@ -57,6 +57,7 @@ public enum EnumProtocol {
         this.addPacket(0x32, EnumProtocolDirection.TO_CLIENT, OutPacketDestroyEntities.class);
         this.addPacket(0x36, EnumProtocolDirection.TO_CLIENT, OutPacketEntityHeadLook.class);
         this.addPacket(0x3A, EnumProtocolDirection.TO_CLIENT, OutPacketHeldItemChange.class);
+        this.addPacket(0x49, EnumProtocolDirection.TO_CLIENT, OutPacketSoundEffect.class);
         this.addPacket(0x4C, EnumProtocolDirection.TO_CLIENT, OutPacketEntityTeleport.class);
     }},
     STATUS(1) {{

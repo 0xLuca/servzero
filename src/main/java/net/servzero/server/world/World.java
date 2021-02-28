@@ -105,6 +105,11 @@ public class World {
         return Server.getInstance().getPlayerList().stream().filter(player -> player.getWorld().equals(this)).collect(Collectors.toList());
     }
 
+    public boolean isEntityAtPosition(Position position) {
+        Location location = Location.fromPosition(this, position);
+        return entityList.stream().anyMatch(entity -> entity.getLocation().equals(location));
+    }
+
     public void sendToAllInWorld(Packet<?> packet) {
         if (getPlayerList().size() > 0) {
             getPlayerList().forEach(player -> player.getNetworkManager().sendPacket(packet));

@@ -22,7 +22,7 @@ public class InPacketLoginHandler extends AbstractInPacketLoginHandler {
     @Override
     public void handle(InPacketLoginStart packet) {
         GameProfile profile = new GameProfile(UUID.randomUUID(), packet.getUsername());
-        Player player = new Player(profile, this.networkManager);
+        Player player = new Player(profile, this.networkManager, EnumGameMode.CREATIVE);
 
         // TODO: Add encryption and compression
 

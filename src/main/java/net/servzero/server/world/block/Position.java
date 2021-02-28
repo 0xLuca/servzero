@@ -43,11 +43,35 @@ public class Position {
         this.z = z;
     }
 
-    public Position toChunkCoord() {
-        return Position.get((int) Math.floor(this.x / 16.0), (int) Math.floor(this.y / 16.0), (int) Math.floor(this.z / 16.0));
+    public Position addX(int x) {
+        return Position.get(this.x + x, this.y, this.z);
+    }
+
+    public Position addY(int y) {
+        return Position.get(this.x, this.y + y, this.z);
+    }
+
+    public Position addZ(int z) {
+        return Position.get(this.x, this.y, this.z + z);
     }
 
     public long toSerializedPosition() {
         return ((long) (this.x & 0x3FFFFFF) << 38) | ((long) (this.y & 0xFFF) << 26) | (this.z & 0x3FFFFFF);
+    }
+
+    public static Position fromSerializedPosition(long serialized) {
+        int x = (int) (serialized >> 38);
+        int y = (int) ((serialized >> 26) & 0xFFF);
+        int z = (int) (serialized << 38 >> 38);
+        return Position.get(x, y, z);
+    }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
     }
 }

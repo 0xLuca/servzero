@@ -1,19 +1,16 @@
 package net.servzero.network.packet.handler;
 
 import net.servzero.chat.EnumChatType;
+import net.servzero.helper.MathHelper;
 import net.servzero.logger.Logger;
 import net.servzero.network.packet.Packet;
 import net.servzero.network.packet.in.*;
-import net.servzero.network.packet.in.player.InPacketPlayer;
-import net.servzero.network.packet.in.player.InPacketPlayerLook;
-import net.servzero.network.packet.in.player.InPacketPlayerPosition;
-import net.servzero.network.packet.in.player.InPacketPlayerPositionLook;
+import net.servzero.network.packet.in.player.*;
 import net.servzero.network.packet.out.OutPacketAnimation;
 import net.servzero.network.packet.out.OutPacketChatMessage;
 import net.servzero.server.Server;
 import net.servzero.server.game.EnumAnimationAction;
 import net.servzero.server.player.Player;
-import net.servzero.server.world.block.BlockState;
 import net.servzero.server.world.block.Blocks;
 import net.servzero.server.world.block.Position;
 
@@ -118,5 +115,33 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
                         this.player.getName() + ": " + packet.getMessage().replace("&", "§"),
                         EnumChatType.CHAT
                 )));
+    }
+
+    @Override
+    public void handleBlockPlace(InPacketPlayerBlockPlace packet) {
+        Position placingPosition = MathHelper.addToPosition(packet.getPosition(), packet.getBlockFace());
+        // TODO: Add entity height check
+        if (this.player.getWorld().isEntityAtPosition(placingPosition) || this.player.getWorld().isEntityAtPosition(placingPosition.addY(-1))) {
+            return;
+        }
+        this.player.getWorld().getBlockAt(placingPosition).setType(Blocks.STONE);
+    }
+
+    @Override
+    public void handleBlockDig(InPacketPlayerDig packet) {
+        System.out.println("DIG: " + packet.getStatus().name());
+        switch (this.player.getGameMode()) {
+            case CREATIVE:
+                this.player.getWorld().getBlockAt(packet.getPosition()).setType(Blocks.AIR);
+                break;
+            case SURVIVAL:
+                // TODO: Implement survival block digging
+                break;
+            case SPECTATOR:
+            case ADVENTURE:
+            case NOT_SET:
+            default:
+                break;
+        }
     }
 }

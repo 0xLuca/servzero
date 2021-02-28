@@ -4,6 +4,7 @@ import net.servzero.chat.EnumChatType;
 import net.servzero.network.NetworkManager;
 import net.servzero.network.packet.out.OutPacketChatMessage;
 import net.servzero.server.entity.Entity;
+import net.servzero.server.game.EnumGameMode;
 
 import java.util.UUID;
 
@@ -11,11 +12,13 @@ public class Player extends Entity {
     private final GameProfile profile;
     private ClientSettings settings = new ClientSettings();
     private final NetworkManager networkManager;
+    private EnumGameMode gameMode;
 
-    public Player(GameProfile profile, NetworkManager networkManager) {
+    public Player(GameProfile profile, NetworkManager networkManager, EnumGameMode gameMode) {
         super();
         this.profile = profile;
         this.networkManager = networkManager;
+        this.gameMode = gameMode;
     }
 
     public NetworkManager getNetworkManager() {
@@ -40,6 +43,10 @@ public class Player extends Entity {
 
     public UUID getUniqueId() {
         return this.profile.getUuid();
+    }
+
+    public EnumGameMode getGameMode() {
+        return gameMode;
     }
 
     public void sendMessage(String message) {

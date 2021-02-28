@@ -99,7 +99,6 @@ public class Entity {
                 if (otherEntity instanceof Player) {
                     Player otherPlayer = (Player) otherEntity;
                     sendDespawn(otherPlayer, thisPlayer);
-                    System.out.println("Sending despawn");
                 }
             }
         });

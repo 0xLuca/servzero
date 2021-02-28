@@ -36,7 +36,11 @@ public class ChunkSection {
     private synchronized Block getBlockAtSectionCoordinate(int x, int y, int z) {
         Block block = blocks[x][y][z];
         if (block == null) {
-            blocks[x][y][z] = block = new Block(parent.getWorld(), Position.get(x, y, z), Blocks.AIR);
+            int chunkX = this.parent.getX();
+            int chunkZ = this.parent.getZ();
+            int chunkStartX = chunkX * 16;
+            int chunkStartZ = chunkZ * 16;
+            blocks[x][y][z] = block = new Block(parent.getWorld(), Position.get(chunkStartX + x, y, chunkStartZ + z), Blocks.AIR);
         }
         return block;
     }
@@ -44,7 +48,11 @@ public class ChunkSection {
     private synchronized void setBlockAtSectionCoordinate(int x, int y, int z, BlockState state) {
         Block block = blocks[x][y][z];
         if (block == null) {
-            blocks[x][y][z] = block = new Block(parent.getWorld(), Position.get(x, y, z), state);
+            int chunkX = this.parent.getX();
+            int chunkZ = this.parent.getZ();
+            int chunkStartX = chunkX * 16;
+            int chunkStartZ = chunkZ * 16;
+            blocks[x][y][z] = block = new Block(parent.getWorld(), Position.get(chunkStartX + x, y, chunkStartZ + z), state);
             block.update();
         } else {
             block.setType(state);
@@ -56,15 +64,15 @@ public class ChunkSection {
     }
 
     public Block getBlockAt(Position position) {
-        int x = position.getX() % 16;
-        int y = position.getY() % 16;
-        int z = position.getZ() % 16;
+        int originalX = position.getX();
+        int originalY = position.getY();
+        int originalZ = position.getZ();
 
-        x = checkNegative(x);
-        y = checkNegative(y);
-        z = checkNegative(z);
+        int sectionX = checkNegative(originalX % 16);
+        int sectionY = checkNegative(originalY % 16);
+        int sectionZ = checkNegative(originalZ % 16);
 
-        return getBlockAtSectionCoordinate(x, y, z);
+        return getBlockAtSectionCoordinate(sectionX, sectionY, sectionZ);
     }
 
     private int checkNegative(int coord) {

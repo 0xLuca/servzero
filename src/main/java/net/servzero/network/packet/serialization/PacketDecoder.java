@@ -23,6 +23,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
         if (byteBuf.readableBytes() != 0) {
             PacketDataSerializer packetDataSerializer = new PacketDataSerializer(byteBuf);
             int packetId = packetDataSerializer.readVarInt();
+
             if (Server.IGNORED_PACKETS.contains(packetId)) {
                 removeOverflow(packetDataSerializer);
                 return;

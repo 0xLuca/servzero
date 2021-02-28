@@ -3,10 +3,7 @@ package net.servzero.network.packet.handler;
 import net.servzero.network.NetworkManager;
 import net.servzero.network.packet.PacketHandler;
 import net.servzero.network.packet.in.*;
-import net.servzero.network.packet.in.player.InPacketPlayer;
-import net.servzero.network.packet.in.player.InPacketPlayerLook;
-import net.servzero.network.packet.in.player.InPacketPlayerPosition;
-import net.servzero.network.packet.in.player.InPacketPlayerPositionLook;
+import net.servzero.network.packet.in.player.*;
 
 public abstract class AbstractInPacketPlayHandler extends PacketHandler {
     public AbstractInPacketPlayHandler(NetworkManager networkManager) {
@@ -27,4 +24,7 @@ public abstract class AbstractInPacketPlayHandler extends PacketHandler {
     public abstract void handleAnimation(InPacketAnimation packet);
     public abstract void handleKeepAlive(InPacketKeepAlive packet);
     public abstract void handleChatMessage(InPacketChatMessage packet);
+
+    public abstract void handleBlockPlace(InPacketPlayerBlockPlace packet);
+    public abstract void handleBlockDig(InPacketPlayerDig packet);
 }

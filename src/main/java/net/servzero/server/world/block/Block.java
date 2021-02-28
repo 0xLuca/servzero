@@ -2,7 +2,6 @@ package net.servzero.server.world.block;
 
 import net.servzero.network.packet.out.OutPacketBlockChange;
 import net.servzero.server.world.IUpdateable;
-import net.servzero.server.world.Location;
 import net.servzero.server.world.World;
 
 public class Block implements IUpdateable {
