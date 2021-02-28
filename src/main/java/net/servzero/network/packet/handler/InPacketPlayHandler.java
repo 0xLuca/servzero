@@ -8,7 +8,10 @@ import net.servzero.network.packet.in.*;
 import net.servzero.network.packet.in.player.*;
 import net.servzero.network.packet.out.OutPacketAnimation;
 import net.servzero.network.packet.out.OutPacketChatMessage;
+import net.servzero.network.packet.out.entity.OutPacketEntityMetadata;
 import net.servzero.server.Server;
+import net.servzero.server.entity.EntityMetadata;
+import net.servzero.network.serialization.EnumDataSerializers;
 import net.servzero.server.game.EnumAnimationAction;
 import net.servzero.server.player.Player;
 import net.servzero.server.world.block.Blocks;
@@ -88,9 +91,8 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
 
         //this.player.getWorld().getBlockAt(this.player.getLocation().asPosition()).setType(Blocks.STONE);
 
-        Server.getInstance().getPlayerList().stream().filter(onlinePlayer -> !onlinePlayer.equals(this.player)).forEach(onlinePlayer -> {
-            onlinePlayer.getNetworkManager().sendPacket(new OutPacketAnimation(this.player.getId(), action));
-        });
+        Server.getInstance().getPlayerList().stream().filter(onlinePlayer -> !onlinePlayer.equals(this.player))
+                .forEach(onlinePlayer -> onlinePlayer.getNetworkManager().sendPacket(new OutPacketAnimation(this.player.getId(), action)));
     }
 
     @Override
@@ -106,6 +108,8 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
             if (command.startsWith("block")) {
                 this.player.getWorld().getBlockAt(Position.get(0, 1, 0)).setType(Blocks.STONE);
                 this.player.sendMessage(this.player.getWorld().getChunkAt(this.player.getLocation().asPosition()).getX() + "" + this.player.getWorld().getChunkAt(this.player.getLocation().asPosition()).getZ());
+            } else if (command.startsWith("sneak")) {
+                Server.getInstance().getPlayerListExcept(this.player).forEach(onlinePlayer -> onlinePlayer.getNetworkManager().sendPacket(new OutPacketEntityMetadata(this.player.getId(), new EntityMetadata<>(0, EnumDataSerializers.BYTE, (byte) 0x02))));
             }
             return;
         }
@@ -129,7 +133,6 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
 
     @Override
     public void handleBlockDig(InPacketPlayerDig packet) {
-        System.out.println("DIG: " + packet.getStatus().name());
         switch (this.player.getGameMode()) {
             case CREATIVE:
                 this.player.getWorld().getBlockAt(packet.getPosition()).setType(Blocks.AIR);
@@ -142,6 +145,20 @@ public class InPacketPlayHandler extends AbstractInPacketPlayHandler {
             case NOT_SET:
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void handleEntityAction(InPacketEntityAction packet) {
+        switch (packet.getAction()) {
+            case START_SNEAKING:
+                Server.getInstance().getPlayerListExcept(this.player).forEach(onlinePlayer -> onlinePlayer.getNetworkManager().sendPacket(new OutPacketEntityMetadata(this.player.getId(), new EntityMetadata<>(0, EnumDataSerializers.BYTE, (byte) 0x02))));
+                break;
+            case STOP_SNEAKING:
+                Server.getInstance().getPlayerListExcept(this.player).forEach(onlinePlayer -> onlinePlayer.getNetworkManager().sendPacket(new OutPacketEntityMetadata(this.player.getId(), new EntityMetadata<>(0, EnumDataSerializers.BYTE, (byte) 0x00))));
+                break;
+            default:
+                // TODO: Handle other actions
         }
     }
 }

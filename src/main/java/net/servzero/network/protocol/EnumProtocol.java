@@ -35,6 +35,7 @@ public enum EnumProtocol {
         this.addPacket(0x0E, EnumProtocolDirection.TO_SERVER, InPacketPlayerPositionLook.class);
         this.addPacket(0x0F, EnumProtocolDirection.TO_SERVER, InPacketPlayerLook.class);
         this.addPacket(0x14, EnumProtocolDirection.TO_SERVER, InPacketPlayerDig.class);
+        this.addPacket(0x15, EnumProtocolDirection.TO_SERVER, InPacketEntityAction.class);
         this.addPacket(0x1A, EnumProtocolDirection.TO_SERVER, InPacketHeldItemChange.class);
         this.addPacket(0x1D, EnumProtocolDirection.TO_SERVER, InPacketAnimation.class);
         this.addPacket(0x1F, EnumProtocolDirection.TO_SERVER, InPacketPlayerBlockPlace.class);
@@ -59,6 +60,7 @@ public enum EnumProtocol {
         this.addPacket(0x32, EnumProtocolDirection.TO_CLIENT, OutPacketDestroyEntities.class);
         this.addPacket(0x36, EnumProtocolDirection.TO_CLIENT, OutPacketEntityHeadLook.class);
         this.addPacket(0x3A, EnumProtocolDirection.TO_CLIENT, OutPacketHeldItemChange.class);
+        this.addPacket(0x3C, EnumProtocolDirection.TO_CLIENT, OutPacketEntityMetadata.class);
         this.addPacket(0x49, EnumProtocolDirection.TO_CLIENT, OutPacketSoundEffect.class);
         this.addPacket(0x4C, EnumProtocolDirection.TO_CLIENT, OutPacketEntityTeleport.class);
     }},

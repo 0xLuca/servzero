@@ -40,7 +40,7 @@ public class PlayerLoginManager {
         ));
 
         // Send the player some information
-        player.getNetworkManager().sendPacket(new OutPacketHeldItemChange(1));
+        player.getNetworkManager().sendPacket(new OutPacketHeldItemChange(0));
         player.getNetworkManager().sendPacket(new OutPacketDifficulty(EnumDifficulty.PEACEFUL));
 
         // Send the player the world's chunks

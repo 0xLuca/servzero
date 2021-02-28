@@ -27,4 +27,6 @@ public abstract class AbstractInPacketPlayHandler extends PacketHandler {
 
     public abstract void handleBlockPlace(InPacketPlayerBlockPlace packet);
     public abstract void handleBlockDig(InPacketPlayerDig packet);
+
+    public abstract void handleEntityAction(InPacketEntityAction packet);
 }
