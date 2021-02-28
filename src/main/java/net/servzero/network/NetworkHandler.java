@@ -67,8 +67,6 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet<PacketHan
 
     public void sendPacket(Packet<?> packet) {
         if (this.isConnected()) {
-            Logger.info("Sending packet: " + packet.getClass().getSimpleName());
-
             final EnumProtocol packetProtocol = EnumProtocol.getByPacket(packet);
             final EnumProtocol currentProtocol = this.channel.attr(NetworkHandler.protocolAttributeKey).get();
 
